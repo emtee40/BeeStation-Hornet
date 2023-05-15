@@ -321,6 +321,10 @@
 						if(R.volume >= R.overdose_threshold && !R.overdosed)
 							R.overdosed = 1
 							need_mob_update += R.overdose_start(C)
+							C.log_message("has started overdosing on [R.name] at [R.volume] units.", LOG_GAME)
+					for(var/addiction in R.addiction_types)
+						C.mind?.add_addiction_points(addiction, R.addiction_types[addiction] * REAGENTS_METABOLISM)
+
 					if(R.overdosed)
 						need_mob_update += R.overdose_process(C)
 				need_mob_update += R.on_mob_life(C)

@@ -175,6 +175,8 @@
 ///Called on SSmood process
 /datum/component/mood/process(delta_time)
 	var/mob/living/owner = parent
+	if(owner.stat == DEAD)
+		return //updating sanity during death leads to people getting revived and being completely insane for simply being dead for a long time
 	switch(sanity)
 		if(SANITY_GREAT-1 to INFINITY)
 			setSanity(sanity+sanity_modifier*delta_time*mood-0.4)

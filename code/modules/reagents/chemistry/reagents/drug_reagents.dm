@@ -116,7 +116,7 @@
 	color = "#0064B4"
 	chem_flags = CHEMICAL_RNG_GENERAL | CHEMICAL_RNG_FUN | CHEMICAL_RNG_BOTANY | CHEMICAL_GOAL_BOTANIST_HARVEST
 	overdose_threshold = 20
-	addiction_types = list(/datum/addiction/opiods = 18) //7.2 per 2 seconds
+	addiction_types = list(/datum/addiction/opioids = 18) //7.2 per 2 seconds
 
 /datum/reagent/drug/krokodil/on_mob_life(mob/living/carbon/M)
 	var/high_message = pick("You feel calm.", "You feel collected.", "You feel like you need to relax.")

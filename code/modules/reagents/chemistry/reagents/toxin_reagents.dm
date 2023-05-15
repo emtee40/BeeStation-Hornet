@@ -479,7 +479,7 @@
 	chem_flags = CHEMICAL_RNG_GENERAL | CHEMICAL_RNG_FUN | CHEMICAL_RNG_BOTANY
 	metabolization_rate = 0.5 * REAGENTS_METABOLISM
 	toxpwr = 0
-	addiction_types = list(/datum/addiction/opiods = 25)
+	addiction_types = list(/datum/addiction/opioids = 25)
 
 /datum/reagent/toxin/fentanyl/on_mob_life(mob/living/carbon/M)
 	M.adjustOrganLoss(ORGAN_SLOT_BRAIN, 3*REM, 150)
