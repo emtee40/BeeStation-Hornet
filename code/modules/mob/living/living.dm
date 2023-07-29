@@ -670,7 +670,7 @@
 		lying_angle_on_movement(direct)
 	if (buckled && buckled.loc != newloc) //not updating position
 		if (!buckled.anchored)
-			return buckled.Move(newloc, direct, update_dir = update_dir, glide_size)
+			return buckled.Move(newloc, direct, update_dir = update_dir, glide_size_override = glide_size)
 		else
 			return 0
 
