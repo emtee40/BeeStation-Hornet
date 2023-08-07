@@ -200,8 +200,7 @@
 	var/move_dir = get_dir(pulling.loc, A)
 	if(!Process_Spacemove(move_dir))
 		return FALSE
-	pulling.Move(get_step(pulling.loc, move_dir), move_dir, glide_size_override = glide_size)
-	return TRUE
+	return pulling.Move(get_step(pulling.loc, move_dir), move_dir, glide_size_override = glide_size)
 
 /mob/living/Move_Pulled(atom/A)
 	. = ..()
