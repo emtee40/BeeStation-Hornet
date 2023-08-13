@@ -121,6 +121,10 @@
 	if(flags & MOVEMENT_LOOP_IGNORE_GLIDE)
 		return
 
+	// in the instance that our delay becomes Zero, we dont want a divide by zero error, so lets reset it 
+	if(delay == 0)
+		delay = 32
+
 	moving.set_glide_size(MOVEMENT_ADJUSTED_GLIDE_SIZE(delay, visual_delay))
 
 ///Handles the actual move, overriden by children
