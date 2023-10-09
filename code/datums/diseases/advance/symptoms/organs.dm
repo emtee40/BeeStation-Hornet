@@ -201,8 +201,8 @@
 					M.adjustOrganLoss(ORGAN_SLOT_LIVER, 200)
 					return
 				if(!M.getorgan(/obj/item/organ/tail))
-					if(S.mutanttail)
-						var/obj/item/organ/tail/O = new S.mutanttail()
+					if(S.mutant_organs)
+						var/obj/item/organ/tail/O = new S.mutant_organs()
 						O.Insert(M, drop_if_replaced = FALSE)
 						M.adjustOrganLoss(ORGAN_SLOT_TAIL, 200)
 						M.visible_message("<span class='notice'>[M] sprouts a new tail!", "<span_class='userdanger'>You sprout a new tail!.</span>")

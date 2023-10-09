@@ -3,8 +3,12 @@
 // All signals send the source datum of the signal as the first argument
 
 // /mob/living signals
-#define COMSIG_LIVING_REVIVE "living_revive"					//! from base of mob/living/revive() (/mob/living, full_heal, admin_revive)
-#define COMSIG_LIVING_RESIST "living_resist"					//! from base of mob/living/resist() (/mob/living)
+///from base of mob/living/resist() (/mob/living)
+#define COMSIG_LIVING_RESIST "living_resist"
+///from base of mob/living/revive() (full_heal, admin_revive)
+#define COMSIG_LIVING_REVIVE "living_revive"
+///from base of /mob/living/regenerate_limbs(): (noheal, excluded_limbs)
+#define COMSIG_LIVING_REGENERATE_LIMBS "living_regen_limbs"
 #define COMSIG_LIVING_IGNITED "living_ignite"					//! from base of mob/living/IgniteMob() (/mob/living)
 #define COMSIG_LIVING_EXTINGUISHED "living_extinguished"		//! from base of mob/living/ExtinguishMob() (/mob/living)
 #define COMSIG_LIVING_ELECTROCUTE_ACT "living_electrocute_act"	//! from base of mob/living/electrocute_act(): (shock_damage)

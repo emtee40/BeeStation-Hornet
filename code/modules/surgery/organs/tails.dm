@@ -94,6 +94,16 @@
 		spines = H.dna.features["spines"]
 		H.update_body()
 
+/obj/item/organ/tail/lizard/before_organ_replacement(obj/item/organ/replacement)
+	. = ..()
+	var/obj/item/organ/tail/lizard/new_tail = replacement
+
+	if(!istype(new_tail))
+		return
+
+	new_tail.tail_type = tail_type
+	new_tail.spines = spines
+
 /obj/item/organ/tail/lizard/is_wagging(mob/living/carbon/human/H)
 	if(!H?.dna?.species)
 		return FALSE

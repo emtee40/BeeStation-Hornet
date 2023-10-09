@@ -408,9 +408,9 @@ GENE SCANNER
 			mutant = TRUE
 		else if(S.mutantlungs != initial(S.mutantlungs))
 			mutant = TRUE
-		else if(S.mutant_brain != initial(S.mutant_brain))
+		else if(S.mutantbrain != initial(S.mutantbrain))
 			mutant = TRUE
-		else if(S.mutant_heart != initial(S.mutant_heart))
+		else if(S.mutantheart != initial(S.mutantheart))
 			mutant = TRUE
 		else if(S.mutanteyes != initial(S.mutanteyes))
 			mutant = TRUE
@@ -420,9 +420,9 @@ GENE SCANNER
 			mutant = TRUE
 		else if(S.mutanttongue != initial(S.mutanttongue))
 			mutant = TRUE
-		else if(S.mutanttail != initial(S.mutanttail))
-			mutant = TRUE
 		else if(S.mutantliver != initial(S.mutantliver))
+			mutant = TRUE
+		else if(S.mutantappendix != initial(S.mutantappendix))
 			mutant = TRUE
 		else if(S.mutantstomach != initial(S.mutantstomach))
 			mutant = TRUE

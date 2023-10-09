@@ -102,22 +102,22 @@
 	return
 
 /datum/mutation/proc/on_losing(mob/living/carbon/owner)
-	if(istype(owner) && (owner.dna.mutations.Remove(src)))
-		if(length(visual_indicators))
-			var/list/mut_overlay = list()
-			if(owner.overlays_standing[layer_used])
-				mut_overlay = owner.overlays_standing[layer_used]
-			owner.remove_overlay(layer_used)
-			mut_overlay.Remove(get_visual_indicator())
-			owner.overlays_standing[layer_used] = mut_overlay
-			owner.apply_overlay(layer_used)
-		if(power)
-			owner.RemoveSpell(power)
-			qdel(src)
-		UnregisterSignal(owner, COMSIG_MOVABLE_MOVED)
-		REMOVE_TRAITS_IN(owner, "[type]")
-		return FALSE
-	return TRUE
+	if(!istype(owner) || !(owner.dna.mutations.Remove(src)))
+		return TRUE
+	. = FALSE
+	if(length(visual_indicators))
+		var/list/mut_overlay = list()
+		if(owner.overlays_standing[layer_used])
+			mut_overlay = owner.overlays_standing[layer_used]
+		owner.remove_overlay(layer_used)
+		mut_overlay.Remove(get_visual_indicator())
+		owner.overlays_standing[layer_used] = mut_overlay
+		owner.apply_overlay(layer_used)
+	if(power)
+		owner.RemoveSpell(power)
+		qdel(src)
+	UnregisterSignal(owner, COMSIG_MOVABLE_MOVED)
+	REMOVE_TRAITS_IN(owner, "[type]")
 
 /mob/living/carbon/proc/update_mutations_overlay()
 	if(!has_dna())

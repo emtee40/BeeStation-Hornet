@@ -208,7 +208,7 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 //Try code/modules/mob/living/carbon/brain/brain_item.dm
 
 /mob/living/proc/regenerate_organs()
-	return 0
+	return FALSE
 
 /mob/living/carbon/regenerate_organs()
 	if(dna?.species)
@@ -235,3 +235,18 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 		if(!getorganslot(ORGAN_SLOT_EARS))
 			var/obj/item/organ/ears/ears = new()
 			ears.Insert(src)
+
+/** get_availability
+  * returns whether the species should innately have this organ.
+  *
+  * regenerate organs works with generic organs, so we need to get whether it can accept certain organs just by what this returns.
+  * This is set to return true or false, depending on if a species has a specific organless trait. stomach for example checks if the species has NOSTOMACH and return based on that.
+  * Arguments:
+  * S - species, needed to return whether the species has an organ specific trait
+  */
+/obj/item/organ/proc/get_availability(datum/species/replacement)
+	return TRUE
+
+/// Called before organs are replaced in regenerate_organs with new ones
+/obj/item/organ/proc/before_organ_replacement(obj/item/organ/replacement)
+	return

@@ -263,25 +263,34 @@
 /obj/item/bodypart/proc/replace_limb(mob/living/carbon/C, special, is_creating = FALSE)
 	if(!istype(C))
 		return
-	var/obj/item/bodypart/O = C.get_bodypart(body_zone)
+	var/obj/item/bodypart/O = C.get_bodypart(body_zone) //needs to happen before attach because multiple limbs in same zone breaks helpers
+	if(!attach_limb(C, special))//we can attach this limb and drop the old after because of our robust bodyparts system. you know, just for a sec.
+		return
 	if(O)
 		O.drop_limb(1)
-	attach_limb(C, special, is_creating)
 
 /obj/item/bodypart/head/replace_limb(mob/living/carbon/C, special, is_creating = FALSE)
 	if(!istype(C))
 		return
 	var/obj/item/bodypart/head/O = C.get_bodypart(body_zone)
+	if(!attach_limb(C, special))
+		return
 	if(O)
-		if(!special)
-			return
-		else
-			O.drop_limb(1)
-	attach_limb(C, special, is_creating)
+		O.drop_limb(1)
 
 /obj/item/bodypart/proc/attach_limb(mob/living/carbon/C, special, is_creating = FALSE)
-	SEND_SIGNAL(C, COMSIG_CARBON_ATTACH_LIMB, src, special)
+	if(SEND_SIGNAL(C,  COMSIG_CARBON_ATTACH_LIMB, src, special) & COMPONENT_NO_ATTACH)
+		return FALSE
+
+	. = TRUE
 	SEND_SIGNAL(src, COMSIG_BODYPART_ATTACHED, C, special)
+
+	/*
+	var/obj/item/bodypart/chest/mob_chest = new_limb_owner.get_bodypart(BODY_ZONE_CHEST)
+	if(mob_chest && !(mob_chest.acceptable_bodytype & bodytype) && !special)
+		return FALSE
+	*/
+
 	moveToNullspace()
 	owner = C
 	C.bodyparts += src
@@ -294,7 +303,7 @@
 		if(C.hud_used)
 			var/atom/movable/screen/inventory/hand/hand = C.hud_used.hand_slots["[held_index]"]
 			if(hand)
-				hand.update_icon()
+				hand.update_appearance()
 		C.update_inv_gloves()
 
 	if(special) //non conventional limb attachment
@@ -321,7 +330,10 @@
 	SEND_SIGNAL(C, COMSIG_CARBON_POST_ATTACH_LIMB, src, special)
 
 
-/obj/item/bodypart/head/attach_limb(mob/living/carbon/C, special, is_creating = FALSE)
+/obj/item/bodypart/head/attach_limb(mob/living/carbon/new_head_owner, special = FALSE, abort = FALSE, is_creating = FALSE)
+	. = ..()
+	if(!.)
+		return .
 	//Transfer some head appearance vars over
 	if(brain)
 		if(brainmob)
@@ -329,7 +341,7 @@
 			brainmob.forceMove(brain) //Throw mob into brain.
 			brain.brainmob = brainmob //Set the brain to use the brainmob
 			brainmob = null //Set head brainmob var to null
-		brain.Insert(C) //Now insert the brain proper
+		brain.Insert(new_head_owner) //Now insert the brain proper
 		brain = null //No more brain in the head
 
 	if(tongue)
@@ -339,8 +351,8 @@
 	if(eyes)
 		eyes = null
 
-	if(ishuman(C) && !is_creating) // don't overwrite if the mob being created
-		var/mob/living/carbon/human/H = C
+	if(ishuman(new_head_owner) && !is_creating) // don't overwrite if the mob being created
+		var/mob/living/carbon/human/H = new_head_owner
 		H.hair_color = hair_color
 		H.hair_style = hair_style
 		H.facial_hair_color = facial_hair_color
@@ -348,47 +360,60 @@
 		H.lip_style = lip_style
 		H.lip_color = lip_color
 	if(real_name)
-		C.real_name = real_name
+		new_head_owner.real_name = real_name
 	real_name = ""
 	name = initial(name)
 
 	//Handle dental implants
-	for(var/obj/item/reagent_containers/pill/P in src)
-		for(var/datum/action/item_action/hands_free/activate_pill/AP in P.actions)
-			P.forceMove(C)
-			AP.Grant(C)
+	for(var/obj/item/reagent_containers/pill/pill in src)
+		for(var/datum/action/item_action/hands_free/activate_pill/pill_action in pill.actions)
+			pill.forceMove(new_head_owner)
+			pill_action.Grant(new_head_owner)
 			break
 
-	..()
+	new_head_owner.updatehealth()
+	new_head_owner.update_body()
+	new_head_owner.update_hair()
+	new_head_owner.update_damage_overlays()
+	new_head_owner.update_mobility()
 
-/obj/item/bodypart/proc/synchronize_bodytypes(mob/living/carbon/C)
-	if(!C.dna.species)
+/obj/item/bodypart/proc/synchronize_bodytypes(mob/living/carbon/carbon_owner)
+	if(!carbon_owner.dna.species)
 		return
 	//This codeblock makes sure that the owner's bodytype flags match the flags of all of it's parts.
 	var/all_limb_flags
-	for(var/obj/item/bodypart/BP as() in C.bodyparts)
-		all_limb_flags =  all_limb_flags | BP.bodytype
+	for(var/obj/item/bodypart/limb as anything in carbon_owner.bodyparts)
+		/*
+		for(var/obj/item/organ/external/ext_organ as anything in limb.external_organs)
+			all_limb_flags = all_limb_flags | ext_organ.external_bodytypes
+		*/
+		all_limb_flags =  all_limb_flags | limb.bodytype
 
-	C.dna.species.bodytype = all_limb_flags
+	carbon_owner.dna.species.bodytype = all_limb_flags
 
 //Regenerates all limbs. Returns amount of limbs regenerated
-/mob/living/proc/regenerate_limbs(noheal, excluded_limbs)
-	return 0
+/mob/living/proc/regenerate_limbs(list/excluded_zones = list())
+	SEND_SIGNAL(src, COMSIG_LIVING_REGENERATE_LIMBS, excluded_zones)
 
-/mob/living/carbon/regenerate_limbs(noheal, list/excluded_limbs)
-	var/list/limb_list = list(BODY_ZONE_HEAD, BODY_ZONE_CHEST, BODY_ZONE_R_ARM, BODY_ZONE_L_ARM, BODY_ZONE_R_LEG, BODY_ZONE_L_LEG)
-	if(excluded_limbs)
-		limb_list -= excluded_limbs
-	for(var/Z in limb_list)
-		. += regenerate_limb(Z, noheal)
+/mob/living/carbon/regenerate_limbs(list/excluded_zones = list())
+	SEND_SIGNAL(src, COMSIG_LIVING_REGENERATE_LIMBS, excluded_zones)
+	var/list/zone_list = list(BODY_ZONE_HEAD, BODY_ZONE_CHEST, BODY_ZONE_R_ARM, BODY_ZONE_L_ARM, BODY_ZONE_R_LEG, BODY_ZONE_L_LEG)
+	if(length(excluded_zones))
+		zone_list -= excluded_zones
+	for(var/limb_zone in zone_list)
+		regenerate_limb(limb_zone)
 
-/mob/living/proc/regenerate_limb(limb_zone, noheal)
+/mob/living/proc/regenerate_limb(limb_zone)
 	return
 
-/mob/living/carbon/regenerate_limb(limb_zone, noheal)
-	var/obj/item/bodypart/L
+/mob/living/carbon/regenerate_limb(limb_zone)
+	var/obj/item/bodypart/limb
 	if(get_bodypart(limb_zone))
-		return 0
-	L = newBodyPart(limb_zone, 0, 0)
-	L.replace_limb(src, TRUE, TRUE)
-	return 1
+		return FALSE
+	limb = newBodyPart(limb_zone, 0, 0)
+	if(limb)
+		if(!limb.attach_limb(src, 1))
+			qdel(limb)
+			return FALSE
+		limb.replace_limb(src, TRUE, TRUE)
+	return TRUE

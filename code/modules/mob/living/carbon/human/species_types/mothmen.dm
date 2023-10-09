@@ -35,6 +35,12 @@
 	species_l_leg = /obj/item/bodypart/l_leg/moth
 	species_r_leg = /obj/item/bodypart/r_leg/moth
 
+/datum/species/moth/regenerate_organs(mob/living/carbon/C,datum/species/old_species,replace_current=TRUE,list/excluded_zones)
+	. = ..()
+	if(ishuman(C))
+		var/mob/living/carbon/human/H = C
+		handle_mutant_bodyparts(H)
+
 /datum/species/moth/random_name(gender, unique, lastname, attempts)
 	. = "[pick(GLOB.moth_first)]"
 

@@ -9,7 +9,7 @@
 	inherent_biotypes = list(MOB_ORGANIC, MOB_HUMANOID, MOB_REPTILE)
 	mutant_bodyparts = list("tail_lizard", "snout", "spines", "horns", "frills", "body_markings", "legs")
 	mutanttongue = /obj/item/organ/tongue/lizard
-	mutanttail = /obj/item/organ/tail/lizard
+	mutant_organs = list(/obj/item/organ/tail/lizard)
 	coldmod = 1.5
 	heatmod = 0.67
 	default_features = list("mcolor" = "0F0", "tail_lizard" = "Smooth", "snout" = "Round", "horns" = "None", "frills" = "None", "spines" = "None", "body_markings" = "None", "legs" = "Normal Legs", "body_size" = "Normal")
@@ -77,6 +77,31 @@
 
 /datum/species/lizard/get_species_lore()
 	return null
+
+/datum/species/lizard/on_species_gain(mob/living/carbon/C, datum/species/old_species, pref_load)
+	var/real_tail_type = C.dna.features["tail_lizard"]
+	var/real_spines = C.dna.features["spines"]
+
+	. = ..()
+
+	// Special handler for loading preferences. If we're doing it from a preference load, we'll want
+	// to make sure we give the appropriate lizard tail AFTER we call the parent proc, as the parent
+	// proc will overwrite the lizard tail. Species code at its finest.
+	if(pref_load)
+		C.dna.features["tail_lizard"] = real_tail_type
+		C.dna.features["spines"] = real_spines
+
+		var/obj/item/organ/tail/lizard/new_tail = new /obj/item/organ/tail/lizard()
+
+		new_tail.tail_type = C.dna.features["tail_lizard"]
+		C.dna.species.mutant_bodyparts |= "tail_lizard"
+
+		new_tail.spines = C.dna.features["spines"]
+		C.dna.species.mutant_bodyparts |= "spines"
+
+		// organ.Insert will qdel any existing organs in the same slot, so
+		// we don't need to manage that.
+		new_tail.Insert(C, TRUE, FALSE)
 
 /*
  Lizard subspecies: ASHWALKERS

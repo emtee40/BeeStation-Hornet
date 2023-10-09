@@ -9,7 +9,7 @@
 	attack_sound = 'sound/weapons/punch1.ogg'
 	miss_sound = 'sound/weapons/punchmiss.ogg'
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | ERT_SPAWN
-	mutant_brain = /obj/item/organ/brain/pumpkin_brain
+	mutantbrain = /obj/item/organ/brain/pumpkin_brain
 
 	species_chest = /obj/item/bodypart/chest/pumpkin_man
 	species_head = /obj/item/bodypart/head/pumpkin_man

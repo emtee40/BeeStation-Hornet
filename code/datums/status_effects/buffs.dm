@@ -475,16 +475,7 @@
 		if(deathTick < 4)
 			deathTick += 1
 		else
-			owner.visible_message("[owner]'s soul is absorbed into the rod, relieving the previous snake of its duty.")
-			var/mob/living/simple_animal/hostile/retaliate/poison/snake/healSnake = new(owner.loc)
-			var/list/chems = list(/datum/reagent/medicine/bicaridine, /datum/reagent/medicine/salbutamol, /datum/reagent/medicine/kelotane, /datum/reagent/medicine/antitoxin)
-			healSnake.poison_type = pick(chems)
-			healSnake.name = "Asclepius's Snake"
-			healSnake.real_name = "Asclepius's Snake"
-			healSnake.desc = "A mystical snake previously trapped upon the Rod of Asclepius, now freed of its burden. Unlike the average snake, its bites contain chemicals with minor healing properties."
-			new /obj/effect/decal/cleanable/ash(owner.loc)
-			new /obj/item/rod_of_asclepius(owner.loc)
-			qdel(owner)
+			consume_owner()
 	else
 		if(iscarbon(owner))
 			var/mob/living/carbon/itemUser = owner
@@ -496,11 +487,21 @@
 					//If user does not have the corresponding hand anymore, give them one and return the rod to their hand
 					if(((hand % 2) == 0))
 						var/obj/item/bodypart/L = itemUser.newBodyPart(BODY_ZONE_R_ARM, FALSE, FALSE)
-						L.attach_limb(itemUser)
+						if(L.attach_limb(itemUser))
+							itemUser.put_in_hand(newRod, hand, forced = TRUE)
+						else
+							qdel(L)
+							consume_owner() //we can't regrow, abort abort
+							return
 						itemUser.put_in_hand(newRod, hand, forced = TRUE)
 					else
 						var/obj/item/bodypart/L = itemUser.newBodyPart(BODY_ZONE_L_ARM, FALSE, FALSE)
-						L.attach_limb(itemUser)
+						if(L.attach_limb(itemUser))
+							itemUser.put_in_hand(newRod, hand, forced = TRUE)
+						else
+							qdel(L)
+							consume_owner() //see above comment
+							return
 						itemUser.put_in_hand(newRod, hand, forced = TRUE)
 					to_chat(itemUser, "<span class='notice'>Your arm suddenly grows back with the Rod of Asclepius still attached!</span>")
 				else
@@ -577,6 +578,17 @@
 	if(!alreadyinfected)
 		to_chat(owner, "<span class='userdanger'>You feel empty as the vile tendrils slink out of your flesh and leave you, a fragile human once more.</span>")
 
+/datum/status_effect/hippocraticOath/proc/consume_owner()
+	owner.visible_message("<span class='notice'>[owner]'s soul is absorbed into the rod, relieving the previous snake of its duty.</span>")
+	var/mob/living/simple_animal/hostile/retaliate/poison/snake/healSnake = new(owner.loc)
+	var/list/chems = list(/datum/reagent/medicine/bicaridine, /datum/reagent/medicine/salbutamol, /datum/reagent/medicine/kelotane, /datum/reagent/medicine/antitoxin)
+	healSnake.poison_type = pick(chems)
+	healSnake.name = "Asclepius's Snake"
+	healSnake.real_name = "Asclepius's Snake"
+	healSnake.desc = "A mystical snake previously trapped upon the Rod of Asclepius, now freed of its burden. Unlike the average snake, its bites contain chemicals with minor healing properties."
+	new /obj/effect/decal/cleanable/ash(owner.loc)
+	new /obj/item/rod_of_asclepius(owner.loc)
+	qdel(owner)
 /datum/status_effect/good_music
 	id = "Good Music"
 	alert_type = null
