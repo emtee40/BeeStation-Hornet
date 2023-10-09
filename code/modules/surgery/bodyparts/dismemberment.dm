@@ -87,18 +87,19 @@
 	if(!owner)
 		return
 	var/atom/drop_loc = owner.drop_location()
+	var/mob/living/carbon/phantom_owner
 
 	SEND_SIGNAL(owner, COMSIG_CARBON_REMOVE_LIMB, src, dismembered)
 	SEND_SIGNAL(src, COMSIG_BODYPART_REMOVED, owner, dismembered)
 	update_limb(TRUE)
-	owner.bodyparts -= src
+	phantom_owner.bodyparts -= src
 
 	if(held_index)
-		if(owner.hand_bodyparts[held_index] == src)
+		if(phantom_owner.hand_bodyparts[held_index] == src)
 			// We only want to do this if the limb being removed is the active hand part.
 			// This catches situations where limbs are "hot-swapped" such as augmentations and roundstart prosthetics.
-			owner.dropItemToGround(owner.get_item_for_held_index(held_index), 1)
-			owner.hand_bodyparts[held_index] = null
+			phantom_owner.dropItemToGround(owner.get_item_for_held_index(held_index), 1)
+			phantom_owner.hand_bodyparts[held_index] = null
 
 	/*
 	for(var/datum/wound/wound as anything in wounds)
@@ -108,8 +109,6 @@
 		scar.victim = null
 		LAZYREMOVE(owner.all_scars, scar)
 	*/
-
-	var/mob/living/carbon/phantom_owner = null // so we can still refer to the guy who lost their limb after said limb forgets 'em
 
 	for(var/datum/surgery/surgery as anything in phantom_owner.surgeries) //if we had an ongoing surgery on that limb, we stop it.
 		if(surgery.operated_bodypart == src)
