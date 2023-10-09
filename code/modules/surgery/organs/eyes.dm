@@ -334,9 +334,8 @@
 		QDEL_LIST(eye_lighting)
 		QDEL_NULL(on_mob)
 	else
-		for(var/i in eye_lighting)
-			var/obj/effect/abstract/eye_lighting/L = i
-			L.forceMove(src)
+		for(var/obj/effect/abstract/eye_lighting/lighting as anything in eye_lighting)
+			lighting.forceMove(src)
 		if(!QDELETED(on_mob))
 			on_mob.set_light_flags(on_mob.light_flags | LIGHT_ATTACHED)
 			on_mob.forceMove(src)

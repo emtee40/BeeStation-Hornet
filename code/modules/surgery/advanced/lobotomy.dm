@@ -23,8 +23,13 @@
 
 /datum/surgery_step/lobotomize
 	name = "perform lobotomy"
-	implements = list(TOOL_SCALPEL = 85, /obj/item/melee/transforming/energy/sword = 55, /obj/item/knife = 35,
-		/obj/item/shard = 25, /obj/item = 20)
+	implements = list(
+		TOOL_SCALPEL = 85,
+		/obj/item/melee/transforming/energy/sword = 55,
+		/obj/item/knife = 35,
+		/obj/item/shard = 25,
+		/obj/item = 20
+	)
 	time = 100
 	preop_sound = 'sound/surgery/scalpel1.ogg'
 	success_sound = 'sound/surgery/scalpel2.ogg'

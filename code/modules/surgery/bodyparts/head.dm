@@ -15,8 +15,8 @@
 	max_stamina_damage = 100
 	is_dimorphic = TRUE
 
-	var/mob/living/brain/brainmob = null //The current occupant.
-	var/obj/item/organ/brain/brain = null //The brain organ
+	var/mob/living/brain/brainmob //The current occupant.
+	var/obj/item/organ/brain/brain //The brain organ
 	var/obj/item/organ/eyes/eyes
 	var/obj/item/organ/ears/ears
 	var/obj/item/organ/tongue/tongue
@@ -32,7 +32,7 @@
 	var/facial_hair_style = "Shaved"
 	//Eye Colouring
 
-	var/lip_style = null
+	var/lip_style
 	var/lip_color = "white"
 
 	var/mouth = TRUE
@@ -45,21 +45,21 @@
 	QDEL_NULL(tongue)
 	return ..()
 
-/obj/item/bodypart/head/handle_atom_del(atom/A)
-	if(A == brain)
+/obj/item/bodypart/head/handle_atom_del(atom/head_atom)
+	if(head_atom == brain)
 		brain = null
 		update_icon_dropped()
 		if(!QDELETED(brainmob)) //this shouldn't happen without badminnery.
 			message_admins("Brainmob: ([ADMIN_LOOKUPFLW(brainmob)]) was left stranded in [src] at [ADMIN_VERBOSEJMP(src)] without a brain!")
 			log_game("Brainmob: ([key_name(brainmob)]) was left stranded in [src] at [AREACOORD(src)] without a brain!")
-	if(A == brainmob)
+	if(head_atom == brainmob)
 		brainmob = null
-	if(A == eyes)
+	if(head_atom == eyes)
 		eyes = null
 		update_icon_dropped()
-	if(A == ears)
+	if(head_atom == ears)
 		ears = null
-	if(A == tongue)
+	if(head_atom == tongue)
 		tongue = null
 	return ..()
 

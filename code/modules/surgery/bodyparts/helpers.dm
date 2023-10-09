@@ -4,9 +4,9 @@
 /mob/living/carbon/get_bodypart(zone)
 	if(!zone)
 		zone = BODY_ZONE_CHEST
-	for(var/obj/item/bodypart/L as() in bodyparts)
-		if(L.body_zone == zone)
-			return L
+	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
+		if(bodypart.body_zone == zone)
+			return bodypart
 
 /mob/living/carbon/has_hand_for_held_index(i)
 	if(i)
@@ -29,8 +29,7 @@
 	return FALSE
 
 /mob/living/carbon/alien/larva/has_left_hand()
-	return 1
-
+	return TRUE
 
 /mob/proc/has_right_hand(check_disabled = TRUE)
 	return TRUE
@@ -43,9 +42,7 @@
 	return FALSE
 
 /mob/living/carbon/alien/larva/has_right_hand()
-	return 1
-
-
+	return TRUE
 
 //Limb numbers
 /mob/proc/get_num_arms(check_disabled = TRUE)
@@ -134,19 +131,19 @@
 	return disabled
 
 ///Remove a specific embedded item from the carbon mob
-/mob/living/carbon/proc/remove_embedded_object(obj/item/I)
-	SEND_SIGNAL(src, COMSIG_CARBON_EMBED_REMOVAL, I)
+/mob/living/carbon/proc/remove_embedded_object(obj/item/embedded)
+	SEND_SIGNAL(src, COMSIG_CARBON_EMBED_REMOVAL, embedded)
 
 ///Remove all embedded objects from all limbs on the carbon mob
 /mob/living/carbon/proc/remove_all_embedded_objects()
-	for(var/obj/item/bodypart/L as() in bodyparts)
-		for(var/obj/item/I in L.embedded_objects)
-			remove_embedded_object(I)
+	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
+		for(var/obj/item/embedded in bodypart.embedded_objects)
+			remove_embedded_object(embedded)
 
 /mob/living/carbon/proc/has_embedded_objects(include_harmless=FALSE)
-	for(var/obj/item/bodypart/L as() in bodyparts)
-		for(var/obj/item/I in L.embedded_objects)
-			if(!include_harmless && I.isEmbedHarmless())
+	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
+		for(var/obj/item/embedded in bodypart.embedded_objects)
+			if(!include_harmless && embedded.isEmbedHarmless())
 				continue
 			return TRUE
 
@@ -164,21 +161,21 @@
 //
 // FUCK YOU AUGMENT CODE - With love, Kapu
 /mob/living/carbon/proc/newBodyPart(zone, robotic, fixed_icon)
-	var/obj/item/bodypart/L
+	var/obj/item/bodypart/new_bodypart
 	switch(zone)
 		if(BODY_ZONE_L_ARM)
-			L = new dna.species.species_l_arm()
+			new_bodypart = new dna.species.species_l_arm()
 		if(BODY_ZONE_R_ARM)
-			L = new dna.species.species_r_arm()
+			new_bodypart = new dna.species.species_r_arm()
 		if(BODY_ZONE_HEAD)
-			L = new dna.species.species_head()
+			new_bodypart = new dna.species.species_head()
 		if(BODY_ZONE_L_LEG)
-			L = new dna.species.species_l_leg()
+			new_bodypart = new dna.species.species_l_leg()
 		if(BODY_ZONE_R_LEG)
-			L = new dna.species.species_r_leg()
+			new_bodypart = new dna.species.species_r_leg()
 		if(BODY_ZONE_CHEST)
-			L = new dna.species.species_chest()
-	. = L
+			new_bodypart = new dna.species.species_chest()
+	. = new_bodypart
 
 /mob/living/carbon/monkey/newBodyPart(zone, robotic, fixed_icon)
 	var/obj/item/bodypart/L

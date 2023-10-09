@@ -10,8 +10,8 @@
 	var/static_icon = 'icons/mob/human_parts.dmi' //Uncolorable sprites
 	icon_state = ""
 	layer = BELOW_MOB_LAYER //so it isn't hidden behind objects when on the floor
-	var/mob/living/carbon/owner = null
-	var/datum/weakref/original_owner = null
+	var/mob/living/carbon/owner
+	var/datum/weakref/original_owner
 	var/needs_processing = FALSE
 	///If you'd like to know if a bodypart is organic, please use is_organic_limb()
 	var/bodytype = BODYTYPE_HUMANOID | BODYTYPE_ORGANIC //List of bodytypes flags, important for fitting clothing.
@@ -24,17 +24,22 @@
 	var/is_dimorphic = FALSE //Is there a sprite difference between male and female?
 	var/draw_color //Greyscale draw color
 
-	var/body_zone //BODY_ZONE_CHEST, BODY_ZONE_L_ARM, etc , used for def_zone
+	/// BODY_ZONE_CHEST, BODY_ZONE_L_ARM, etc , used for def_zone
+	var/body_zone
 	var/aux_zone // used for hands
 	var/aux_layer
-	var/body_part = null //bitflag used to check which clothes cover this bodypart
+	/// bitflag used to check which clothes cover this bodypart
+	var/body_part
 
 	var/list/embedded_objects = list()
-	var/held_index = 0 //are we a hand? if so, which one!
-	var/is_pseudopart = FALSE //For limbs that don't really exist, eg chainsaws
+	/// are we a hand? if so, which one!
+	var/held_index = 0
+	/// For limbs that don't really exist, eg chainsaws
+	var/is_pseudopart = FALSE
 
 	var/disabled = BODYPART_NOT_DISABLED //If disabled, limb is as good as missing
-	var/body_damage_coeff = 1 //Multiplier of the limb's damage that gets applied to the mob
+	///Multiplier of the limb's damage that gets applied to the mob
+	var/body_damage_coeff = 1
 	var/stam_damage_coeff = 0.7 //Why is this the default???
 	var/brutestate = 0
 	var/burnstate = 0
@@ -46,8 +51,10 @@
 	var/stamina_dam = 0
 	var/stamina_heal_rate = 1	//Stamina heal multiplier
 
-	var/brute_reduction = 0 //Subtracted to brute damage taken
-	var/burn_reduction = 0	//Subtracted to burn damage taken
+	//Subtracted to brute damage taken
+	var/brute_reduction = 0
+	//Subtracted to burn damage taken
+	var/burn_reduction = 0
 
 	//Coloring and proper item icon update
 	var/skin_tone = ""
@@ -56,14 +63,17 @@
 	var/mutation_color = ""
 	var/no_update = 0
 
-	var/animal_origin = null //for nonhuman bodypart (e.g. monkey)
-	var/dismemberable = 1 //whether it can be dismembered with a weapon.
+	///for nonhuman bodypart (e.g. monkey)
+	var/animal_origin
+	///whether it can be dismembered with a weapon.
+	var/dismemberable = 1
 
 	var/px_x = 0
 	var/px_y = 0
 
 	var/species_flags_list = list()
-	var/dmg_overlay_type //the type of damage overlay (if any) to use when this bodypart is bruised/burned.
+	///the type of damage overlay (if any) to use when this bodypart is bruised/burned.
+	var/dmg_overlay_type
 
 	//Damage messages used by help_shake_act()
 	var/light_brute_msg = "bruised"
