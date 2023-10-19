@@ -113,6 +113,8 @@
 	client << browse(html, "window=[id];[options]")
 	// Detect whether the control is a browser
 	is_browser = winexists(client, id) == "BROWSER"
+	if(!client) // winexists() sleeps so the client can become null
+		return
 	// Instruct the client to signal UI when the window is closed.
 	if(!is_browser)
 		winset(client, id, "on-close=\"uiclose [id]\"")
@@ -354,7 +356,10 @@
 	// If not locked, handle these message types
 	switch(type)
 		if("ping")
-			send_message("pingReply", payload)
+			if(client)
+				client.afk_end()
+				addtimer(CALLBACK(src, TYPE_PROC_REF(/client, afk_start)), CONFIG_GET(number/inactivity_period) + 5, TIMER_UNIQUE | TIMER_OVERRIDE | TIMER_DELETE_ME)
+			send_message("ping/reply", payload)
 		if("suspend")
 			close(can_be_suspended = TRUE)
 		if("close")

@@ -581,7 +581,7 @@
 	desc = "A large duffel bag containing a Bulldog, some drums, and a pair of thermal imaging glasses."
 
 /obj/item/storage/backpack/duffelbag/syndie/bulldogbundle/PopulateContents()
-	new /obj/item/gun/ballistic/shotgun/bulldog(src)
+	new /obj/item/gun/ballistic/shotgun/automatic/bulldog(src)
 	new /obj/item/ammo_box/magazine/m12g(src)
 	new /obj/item/ammo_box/magazine/m12g(src)
 	new /obj/item/clothing/glasses/thermal/syndi(src)
@@ -616,7 +616,7 @@
 	new /obj/item/ammo_box/foambox/riot(src)
 	new /obj/item/grenade/chem_grenade/bioterrorfoam(src)
 	if(prob(5))
-		new /obj/item/reagent_containers/food/snacks/pizza/pineapple(src)
+		new /obj/item/food/pizza/pineapple(src)
 
 /obj/item/storage/backpack/duffelbag/syndie/c4/PopulateContents()
 	for(var/i in 1 to 10)

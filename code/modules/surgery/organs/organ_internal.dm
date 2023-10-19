@@ -39,8 +39,13 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 /obj/item/organ/Initialize()
 	. = ..()
 	if(organ_flags & ORGAN_EDIBLE)
-		AddComponent(/datum/component/edible, initial_reagents = food_reagents, foodtypes = RAW | MEAT | GORE, \
-			pre_eat = CALLBACK(src, PROC_REF(pre_eat)), on_compost = CALLBACK(src, PROC_REF(pre_compost)) , after_eat = CALLBACK(src, PROC_REF(on_eat_from)))
+		AddComponent(/datum/component/edible,\
+		initial_reagents = food_reagents,\
+		foodtypes = RAW | MEAT | GORE,\
+		volume = 10,\
+		pre_eat = CALLBACK(src, PROC_REF(pre_eat)),\
+		on_compost = CALLBACK(src, PROC_REF(pre_compost)),\
+		after_eat = CALLBACK(src, PROC_REF(on_eat_from)))
 
 /obj/item/organ/proc/Insert(mob/living/carbon/M, special = 0, drop_if_replaced = TRUE, pref_load = FALSE)
 	if(!iscarbon(M) || owner == M)
@@ -116,6 +121,7 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 		return
 	if(damage > high_threshold)
 		. += "<span class='warning'>[src] is starting to look discolored.</span>"
+	. += "<span class='info'>[src] fit[name[length(name)] == "s" ? "" : "s"] in the <b>[parse_zone(zone)]</b>.</span>"
 
 /obj/item/organ/Initialize(mapload)
 	. = ..()
@@ -161,7 +167,7 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 		return
 	if(maximum < damage)
 		return
-	damage = CLAMP(damage + d, 0, maximum)
+	damage = clamp(damage + d, 0, maximum)
 	var/mess = check_damage_thresholds(owner)
 	prev_damage = damage
 	if(mess && owner)
