@@ -65,7 +65,7 @@
 
 	var/old_move_delay = move_delay
 	move_delay = world.time + world.tick_lag //this is here because Move() can now be called mutiple times per tick
-	if(!mob || !mob.loc)
+	if(!mob?.loc)
 		return FALSE
 	if(!newloc || !direct)
 		return FALSE
@@ -86,7 +86,7 @@
 		Process_Incorpmove(direct)
 		return FALSE
 
-	if(mob.remote_control)					//we're controlling something, our movement is relayed to it
+	if(mob.remote_control) //we're controlling something, our movement is relayed to it
 		return mob.remote_control.relaymove(mob, direct)
 
 	if(isAI(mob))
@@ -95,7 +95,7 @@
 	if(Process_Grab()) //are we restrained by someone's grip?
 		return
 
-	if(mob.buckled)							//if we're buckled to something, tell it we moved.
+	if(mob.buckled) //if we're buckled to something, tell it we moved.
 		return mob.buckled.relaymove(mob, direct)
 
 	if(!(L.mobility_flags & MOBILITY_MOVE))
@@ -113,7 +113,8 @@
 
 	//We are now going to move
 	var/add_delay = mob.cached_multiplicative_slowdown
-	mob.set_glide_size(DELAY_TO_GLIDE_SIZE(add_delay * ( (NSCOMPONENT(direct) && EWCOMPONENT(direct)) ? SQRT_2 : 1 ) )) // set it now in case of pulled objects
+	var/new_glide_size = DELAY_TO_GLIDE_SIZE(add_delay * ( (NSCOMPONENT(direct) && EWCOMPONENT(direct)) ? sqrt(2) : 1 ) )
+	mob.set_glide_size(new_glide_size) // set it now in case of pulled objects
 	//If the move was recent, count using old_move_delay
 	//We want fractional behavior and all
 	if(old_move_delay + world.tick_lag > world.time)
@@ -141,14 +142,21 @@
 
 	. = ..()
 
-	if((direct & (direct - 1)) && mob.loc == newloc) //moved diagonally successfully
 	// Record any time that we gained due to sub-tick slowdown
 	var/move_delta = move_delay - floored_move_delay
 	add_delay += move_delta
+
+	if((direct & (direct - 1)) && mob.loc == newloc) //moved diagonally successfully
+		add_delay *= sqrt(2)
+
+	var/after_glide = 0
 	if(visual_delay)
-		mob.set_glide_size(visual_delay)
+		after_glide = visual_delay
 	else
-		mob.set_glide_size(DELAY_TO_GLIDE_SIZE(add_delay))
+		after_glide = DELAY_TO_GLIDE_SIZE(add_delay)
+
+	mob.set_glide_size(after_glide)
+
 	// Apply the movement delay
 	move_delay += add_delay
 	if(.) // If mob is null here, we deserve the runtime
