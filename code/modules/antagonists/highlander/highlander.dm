@@ -5,6 +5,7 @@
 	show_name_in_check_antagonists = TRUE
 	can_elimination_hijack = ELIMINATION_ENABLED
 	count_against_dynamic_roll_chance = FALSE
+	banning_key = BAN_ROLE_ALL_ANTAGONISTS
 
 /datum/antagonist/highlander/apply_innate_effects(mob/living/mob_override)
 	var/mob/living/L = owner.current || mob_override
@@ -56,8 +57,8 @@
 		P.attack_self(H)
 	var/obj/item/card/id/W = new(H)
 	W.icon_state = "centcom"
-	grant_accesses_to_card(W.card_access, get_all_accesses())
-	grant_accesses_to_card(W.card_access, get_all_centcom_access())
+	W.access = get_all_accesses()
+	W.access |= get_all_centcom_access()
 	W.assignment = "Highlander"
 	W.registered_name = H.real_name
 	ADD_TRAIT(W, TRAIT_NODROP, HIGHLANDER)

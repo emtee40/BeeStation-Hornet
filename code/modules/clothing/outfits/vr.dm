@@ -11,7 +11,7 @@
 /datum/outfit/vr/post_equip(mob/living/carbon/human/H)
 	var/obj/item/card/id/id = H.wear_id
 	if (istype(id))
-		grant_accesses_to_card(id.card_access, get_all_accesses())
+		id.access |= get_all_accesses()
 
 /datum/outfit/vr/syndicate
 	name = "Syndicate VR Operative - Basic"
@@ -23,7 +23,7 @@
 	belt = /obj/item/gun/ballistic/automatic/pistol
 	l_pocket = /obj/item/paper/fluff/vr/fluke_ops
 	backpack_contents = list(/obj/item/storage/box/syndie=1,\
-		/obj/item/kitchen/knife/combat/survival)
+		/obj/item/knife/combat/survival)
 
 /datum/outfit/vr/syndicate/post_equip(mob/living/carbon/human/H)
 	. = ..()
@@ -33,7 +33,7 @@
 	W.implant(H)
 	var/obj/item/implant/explosive/E = new/obj/item/implant/explosive(H)
 	E.implant(H)
-	H.faction |= ROLE_SYNDICATE
+	H.faction |= FACTION_SYNDICATE
 	H.update_icons()
 
 /obj/item/paper/fluff/vr/fluke_ops

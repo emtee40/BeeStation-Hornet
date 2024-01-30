@@ -1,6 +1,8 @@
 /datum/job/deputy
 	title = JOB_NAME_DEPUTY
 	flag = DEPUTY
+	description = "Follow orders and do your best to maintain order on the station while following Space Law."
+	department_for_prefs = DEPT_BITFLAG_SEC
 	department_head = list(JOB_NAME_HEADOFSECURITY)
 	supervisors = "the head of security"
 	faction = "Station"
@@ -22,7 +24,7 @@
 	payment_per_department = list(ACCOUNT_SEC_ID = PAYCHECK_EASY)
 	mind_traits = list(TRAIT_LAW_ENFORCEMENT_METABOLISM)
 
-	display_order = JOB_DISPLAY_ORDER_DEPUTY  //see code/__DEFINES/jobs.dm
+	show_in_prefs = FALSE
 
 /datum/outfit/job/deputy
 	name = JOB_NAME_DEPUTY
@@ -41,10 +43,10 @@
 	backpack = /obj/item/storage/backpack/security
 	satchel = /obj/item/storage/backpack/satchel/sec
 	duffelbag = /obj/item/storage/backpack/duffelbag/sec
-	box = /obj/item/storage/box/survival
+	box = /obj/item/storage/box/survival/normal
 
 /obj/item/card/id/pass/deputy
 	name = "deputy promotion card"
 	desc = "A small card, that when used on an ID, will grant basic security access, and the job title of 'Deputy.'"
 	assignment = JOB_NAME_DEPUTY
-	card_access = list(ACCESS_SEC_DOORS, ACCESS_MAINT_TUNNELS, ACCESS_COURT, ACCESS_BRIG, ACCESS_WEAPONS)
+	access = list(ACCESS_SEC_DOORS, ACCESS_MAINT_TUNNELS, ACCESS_COURT, ACCESS_BRIG, ACCESS_WEAPONS)

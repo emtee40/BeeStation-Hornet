@@ -1,33 +1,46 @@
 
 ///returns TRUE if this mob has sufficient access to use this object.
 ///Note that this will return FALSE when passed null, unless the door doesn't require any access.
-/obj/proc/allowed(mob/M)
+/obj/proc/allowed(mob/accessor)
+	if(SEND_SIGNAL(src, COMSIG_OBJ_ALLOWED, accessor) & COMPONENT_OBJ_ALLOW)
+		return TRUE
 	//check if it doesn't require any access at all
 	if(src.check_access(null))
 		return TRUE
-	if(issilicon(M))
-		var/mob/living/silicon/S = M
+	if(length(accessor.buckled_mobs) && handle_buckled_access(accessor))
+		return TRUE
+	if(issilicon(accessor))
+		var/mob/living/silicon/S = accessor
 		return check_access(S.internal_id_card)	//AI can do whatever it wants
-	if(IsAdminGhost(M))
+	if(IsAdminGhost(accessor))
 		//Access can't stop the abuse
 		return TRUE
-	else if(istype(M) && SEND_SIGNAL(M, COMSIG_MOB_ALLOWED, src))
+	else if(istype(accessor) && SEND_SIGNAL(accessor, COMSIG_MOB_ALLOWED, src))
 		return TRUE
-	else if(ishuman(M))
-		var/mob/living/carbon/human/H = M
+	else if(ishuman(accessor))
+		var/mob/living/carbon/human/H = accessor
 		//if they are holding or wearing a card that has access, that works
 		if(check_access(H.get_active_held_item()) || src.check_access(H.wear_id))
 			return TRUE
-	else if(ismonkey(M) || isalienadult(M))
-		var/mob/living/carbon/george = M
+	else if(ismonkey(accessor) || isalienadult(accessor))
+		var/mob/living/carbon/george = accessor
 		//they can only hold things :(
 		if(check_access(george.get_active_held_item()))
 			return TRUE
-	else if(isanimal(M))
-		var/mob/living/simple_animal/A = M
+	else if(isanimal(accessor))
+		var/mob/living/simple_animal/A = accessor
 		if(check_access(A.get_active_held_item()) || check_access(A.access_card))
 			return TRUE
 	return FALSE
+
+/obj/proc/handle_buckled_access(mob/accessor)
+	. = FALSE
+	// check if someone riding on / buckled to them has access
+	for(var/mob/living/buckled in accessor.buckled_mobs)
+		if(accessor == buckled || buckled == src) // just in case to prevent a possible infinite loop scenario (but it won't happen)
+			continue
+		if(allowed(buckled))
+			return TRUE
 
 /obj/item/proc/GetAccess()
 	return list()
@@ -81,62 +94,15 @@
 		return FALSE
 
 	for(var/each_code in req_access)
-		if(!check_access_textified(accesses_to_check, each_code)) //doesn't have this access
+		if(!(each_code in accesses_to_check)) //doesn't have this access
 			return FALSE
 
 	if(length(req_one_access))
 		for(var/each_code in req_one_access)
-			if(check_access_textified(accesses_to_check, each_code)) //has an access from the single access list
+			if(each_code in accesses_to_check) //has an access from the single access list
 				return TRUE
 		return FALSE
 	return TRUE
-
-
-/// Note: don't merge 'access_list' in the parameter. using grant_accesses_to_card() multiple times is recommended.
-/// 'referenced_target_access' will be a reference list if you send a list of an ID card.
-/proc/grant_accesses_to_card(list/referenced_target_access, access_single_or_list)
-	if(!access_single_or_list)
-		return
-	if(isnum(access_single_or_list) || istext(access_single_or_list))
-		referenced_target_access["[access_single_or_list]"] = TRUE
-		return
-
-	if(!islist(access_single_or_list))
-		return
-	for(var/each in access_single_or_list)
-		each = "[each]"
-		var/acc_value = access_single_or_list?[each]
-		if(isnull(acc_value)) // if 'list(code=null)', it's good to give because it's value-less key
-			referenced_target_access[each] = TRUE
-		else if(acc_value) // if 'list(code=TRUE)', they have access to give
-			referenced_target_access[each] = TRUE
-		// if 'list(code=FALSE)', it shouldn't give access to them even if a key exists.
-
-
-/proc/remove_accesses_from_card(list/referenced_target_access, access_single_or_list)
-	if(!access_single_or_list)
-		return
-	if(isnum(access_single_or_list) || istext(access_single_or_list))
-		referenced_target_access["[access_single_or_list]"] = FALSE
-		return
-
-	if(!islist(access_single_or_list))
-		return
-	for(var/each in access_single_or_list)
-		referenced_target_access["[each]"] = FALSE
-	// note: these accesses look weird when you check card_access in vv menu
-	// it says 'list(sort_number=code)', but it is actually 'list(code=FALSE)', so don't worry about it.
-
-/proc/check_access_textified(list/access_list_in_card, single_code)
-	if(!single_code)
-		stack_trace("check_access_textified recieved nothing in single_code parameter. Returns TRUE for failsafe.")
-		return TRUE
-	if(islist(single_code))
-		stack_trace("check_access_textified recieved a list in single_code parameter. Returns TRUE for failsafe.")
-		return TRUE
-	return access_list_in_card["[single_code]"] || FALSE // it won't return NULL
-
-
 
 /*
  * Checks if this packet can access this device

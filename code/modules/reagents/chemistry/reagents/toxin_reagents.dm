@@ -127,6 +127,7 @@
 /datum/reagent/toxin/minttoxin/on_mob_life(mob/living/carbon/M)
 	if(HAS_TRAIT_FROM(M, TRAIT_FAT, OBESITY))
 		M.client?.give_award(/datum/award/achievement/misc/mintgib, M)
+		M.investigate_log("has been gibbed by consuming [src] while fat.", INVESTIGATE_DEATHS)
 		M.gib()
 	return ..()
 
@@ -197,7 +198,8 @@
 	addiction_types = list(/datum/addiction/hallucinogens = 18) //7.2 per 2 seconds
 
 /datum/reagent/toxin/mindbreaker/on_mob_life(mob/living/carbon/M)
-	M.hallucination += 5
+	if(!M.has_quirk(/datum/quirk/insanity))
+		M.hallucination += 5
 	return ..()
 
 /datum/reagent/toxin/plantbgone
@@ -800,7 +802,7 @@
 
 
 /datum/reagent/toxin/acid
-	name = "Sulphuric Acid"
+	name = "Sulfuric Acid"
 	description = "A strong mineral acid with the molecular formula H2SO4."
 	color = "#00FF32"
 	chem_flags = CHEMICAL_RNG_GENERAL | CHEMICAL_RNG_FUN | CHEMICAL_RNG_BOTANY

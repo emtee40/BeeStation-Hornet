@@ -41,13 +41,13 @@
 	.=..()
 	update_icon()
 
-/obj/item/card/data/update_icon()
-	cut_overlays()
+/obj/item/card/data/update_overlays()
+	. = ..()
 	if(detail_color == COLOR_FLOORTILE_GRAY)
 		return
 	var/mutable_appearance/detail_overlay = mutable_appearance('icons/obj/card.dmi', "[icon_state]-color")
 	detail_overlay.color = detail_color
-	add_overlay(detail_overlay)
+	. += detail_overlay
 
 /obj/item/card/data/full_color
 	desc = "A plastic magstripe card for simple and speedy data storage and transfer. This one has the entire card colored."
@@ -69,12 +69,18 @@
 	righthand_file = 'icons/mob/inhands/equipment/idcards_righthand.dmi'
 	item_flags = NO_MAT_REDEMPTION | NOBLUDGEON | ISWEAPON
 	var/prox_check = TRUE //If the emag requires you to be in range
+	var/charges = 4
+	var/max_charges = 4
+	var/list/charge_timers = list()
+	var/charge_time = 30 SECONDS
+	var/updating = FALSE
+	var/sound/recharge_sound
+	var/soundvary = TRUE
 
-/obj/item/card/emag/bluespace
-	name = "bluespace cryptographic sequencer"
-	desc = "It's a blue card with a magnetic strip attached to some circuitry. It appears to have some sort of transmitter attached to it."
-	icon_state = "emag_bs"
-	prox_check = FALSE
+/obj/item/card/emag/Initialize(mapload)
+	. = ..()
+	update_appearance(updates = UPDATE_OVERLAYS)
+	recharge_sound = sound('sound/machines/twobeep.ogg', FALSE, FALSE, 0, 10)
 
 /obj/item/card/emag/attack()
 	return
@@ -84,8 +90,58 @@
 	var/atom/A = target
 	if(!proximity && prox_check)
 		return
-	log_combat(user, A, "attempted to emag")
-	A.use_emag(user)
+	log_combat(user, A, "attempted to emag with [charges] charges")
+	A.use_emag(user, src)
+
+/obj/item/card/emag/proc/use_charge()
+	charges--
+	charge_timers.Add(addtimer(CALLBACK(src, PROC_REF(recharge)), charge_time, TIMER_STOPPABLE))
+	INVOKE_ASYNC(src, PROC_REF(do_animation))
+
+/obj/item/card/emag/proc/recharge()
+	charges = min(charges+1, max_charges)
+	if(soundvary)
+		recharge_sound.frequency = get_rand_frequency()
+	if(get_dist(src, usr) == 0)
+		SEND_SOUND(usr, recharge_sound)
+	charge_timers.Remove(charge_timers[1])
+	INVOKE_ASYNC(src, PROC_REF(do_animation))
+
+/obj/item/card/emag/proc/do_animation()
+	updating = TRUE
+	update_appearance(updates = UPDATE_OVERLAYS)
+	sleep(3)
+	updating = FALSE
+	update_appearance(updates = UPDATE_OVERLAYS)
+
+/obj/item/card/emag/examine(mob/user)
+	. = ..()
+	switch(charges)
+		if(2 to INFINITY)
+			. += "<span class='notice'>It has [charges] charges remaining.</span>"
+		if(1)
+			. += "<span class='notice'>It has [charges] charge remaining.</span>"
+		if(-INFINITY to 0)
+			. += "<span class='warning'>It's out of charges!</span>"
+
+/obj/item/card/emag/update_overlays()
+	. = ..()
+	if(updating)
+		. += "emag_progress"
+	else
+		switch(charges)
+			if(-INFINITY to 0)
+				. += "emag_0"
+			if(10 to INFINITY)
+				. += "emag_9"
+			if(1 to 9)
+				. += "emag_[charges]"
+
+/obj/item/card/emag/bluespace
+	name = "bluespace cryptographic sequencer"
+	desc = "It's a blue card with a magnetic strip attached to some circuitry. It appears to have some sort of transmitter attached to it."
+	icon_state = "emag_bs"
+	prox_check = FALSE
 
 /obj/item/card/emagfake
 	desc = "It is an ID card, the magnetic strip is exposed and attached to some circuitry. Closer inspection shows that this card is a poorly made replica, with a \"DonkCo\" logo stamped on the back."
@@ -110,7 +166,7 @@
 	slot_flags = ITEM_SLOT_ID
 	armor = list(MELEE = 0,  BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, RAD = 0, FIRE = 100, ACID = 100, STAMINA = 0)
 	resistance_flags = FIRE_PROOF | ACID_PROOF
-	var/list/card_access = list()
+	var/list/access = list()
 	var/registered_name// The name registered_name on the card
 	var/assignment
 	var/hud_state = JOB_HUD_UNKNOWN
@@ -122,11 +178,9 @@
 
 /obj/item/card/id/Initialize(mapload)
 	. = ..()
-	var/temp = card_access
-	card_access = list()
-	grant_accesses_to_card(card_access, temp)
 	if(mapload && access_txt)
-		grant_accesses_to_card(card_access, text2access(access_txt))
+		access = text2access(access_txt)
+	//RegisterSignal(src, COMSIG_ATOM_UPDATED_ICON, PROC_REFupdate_in_wallet))
 
 /obj/item/card/id/Destroy()
 	if (registered_account)
@@ -335,13 +389,25 @@
 		. += "<span class='info'>There is no registered account linked to this card. Alt-Click to add one.</span>"
 
 /obj/item/card/id/GetAccess()
-	return card_access
+	return access
 
 /obj/item/card/id/GetID()
 	return src
 
 /obj/item/card/id/RemoveID()
 	return src
+
+/*
+/// Called on COMSIG_ATOM_UPDATED_ICON. Updates the visuals of the wallet this card is in.
+/obj/item/card/id/proc/update_in_wallet()
+	SIGNAL_HANDLER
+
+	if(istype(loc, /obj/item/storage/wallet))
+		var/obj/item/storage/wallet/powergaming = loc
+		if(powergaming.front_id == src)
+			powergaming.update_label()
+			powergaming.update_appearance()
+*/
 
 /*
 Usage:
@@ -369,7 +435,7 @@ update_label("John Doe", "Clowny")
 
 /obj/item/card/id/silver/reaper
 	name = "Thirteen's ID Card (Reaper)"
-	card_access = list(ACCESS_MAINT_TUNNELS)
+	access = list(ACCESS_MAINT_TUNNELS)
 	assignment = "Reaper"
 	registered_name = "Thirteen"
 	hud_state = JOB_HUD_SYNDICATE
@@ -385,27 +451,27 @@ update_label("John Doe", "Clowny")
 
 /obj/item/card/id/silver/spacepol
 	name = "space police access card"
-	card_access = list(ACCESS_HUNTERS)
+	access = list(ACCESS_HUNTERS)
 	hud_state = JOB_HUD_NOTCENTCOM
 
 /obj/item/card/id/silver/bounty
 	name = "bounty hunter access card"
-	card_access = list(ACCESS_HUNTERS)
+	access = list(ACCESS_HUNTERS)
 	hud_state = JOB_HUD_UNKNOWN
 
 /obj/item/card/id/space_russian
 	name = "space russian card"
-	card_access = list(ACCESS_HUNTERS)
+	access = list(ACCESS_HUNTERS)
 	hud_state = JOB_HUD_UNKNOWN
 
 /obj/item/card/id/pirate
 	name = "pirate ship card"
-	card_access = list(ACCESS_PIRATES)
+	access = list(ACCESS_PIRATES)
 	hud_state = JOB_HUD_SYNDICATE
 
 /obj/item/card/id/syndicate
 	name = "agent card"
-	card_access = list(ACCESS_MAINT_TUNNELS, ACCESS_SYNDICATE)
+	access = list(ACCESS_MAINT_TUNNELS, ACCESS_SYNDICATE)
 	icon_state = "syndicate"
 	hud_state = JOB_HUD_SYNDICATE
 	var/anyone = FALSE //Can anyone forge the ID or just syndicate?
@@ -430,13 +496,13 @@ update_label("John Doe", "Clowny")
 		/obj/item/card/id/pass/mining_access_card,
 		/obj/item/card/mining_point_card,
 		/obj/item/card/id,
-		/obj/item/card/id/prisoner/one,
-		/obj/item/card/id/prisoner/two,
-		/obj/item/card/id/prisoner/three,
-		/obj/item/card/id/prisoner/four,
-		/obj/item/card/id/prisoner/five,
-		/obj/item/card/id/prisoner/six,
-		/obj/item/card/id/prisoner/seven,
+		/obj/item/card/id/gulag/one,
+		/obj/item/card/id/gulag/two,
+		/obj/item/card/id/gulag/three,
+		/obj/item/card/id/gulag/four,
+		/obj/item/card/id/gulag/five,
+		/obj/item/card/id/gulag/six,
+		/obj/item/card/id/gulag/seven,
 		/obj/item/card/id/departmental_budget,
 		/obj/item/card/id/syndicate/anyone,
 		/obj/item/card/id/syndicate/nuke_leader,
@@ -454,13 +520,15 @@ update_label("John Doe", "Clowny")
 		return
 	if(istype(O, /obj/item/card/id))
 		var/obj/item/card/id/I = O
-		grant_accesses_to_card(src.card_access, I.card_access)
+		src.access |= I.access
 		log_id("[key_name(user)] copied all avaliable access from [I] to agent ID [src] at [AREACOORD(user)].")
 		if(isliving(user) && user.mind)
 			if(user.mind.special_role || anyone)
 				to_chat(usr, "<span class='notice'>The card's microscanners activate as you pass it over the ID, copying its access.</span>")
 
 /obj/item/card/id/syndicate/attack_self(mob/user)
+	if(chameleon_action.hidden)
+		return ..()
 	if(isliving(user) && user.mind)
 		var/first_use = registered_name ? FALSE : TRUE
 		if(!(user.mind.special_role || anyone)) //Unless anyone is allowed, only syndies can use the card, to stop metagaming.
@@ -477,7 +545,7 @@ update_label("John Doe", "Clowny")
 				assignment = "Assistant"
 
 			var/input_name = stripped_input(user, "What name would you like to put on this card? Leave blank to randomise.", "Agent card name", registered_name ? registered_name : (ishuman(user) ? user.real_name : user.name), MAX_NAME_LEN)
-			input_name = reject_bad_name(input_name)
+			input_name = reject_bad_name(input_name, allow_numbers = TRUE)
 			if(!input_name)
 				// Invalid/blank names give a randomly generated one.
 				if(user.gender == MALE)
@@ -533,9 +601,25 @@ update_label("John Doe", "Clowny")
 		return
 	chameleon_action.emp_randomise()
 
+/obj/item/card/id/syndicate/attackby(obj/item/W, mob/user, params)
+	if(W.tool_behaviour == TOOL_MULTITOOL)
+		if(chameleon_action.hidden)
+			chameleon_action.hidden = FALSE
+			actions += chameleon_action
+			chameleon_action.Grant(user)
+			log_game("[key_name(user)] has removed the disguise lock on the agent ID ([name]) with [W]")
+			return
+		else
+			chameleon_action.hidden = TRUE
+			actions -= chameleon_action
+			chameleon_action.Remove(user)
+			log_game("[key_name(user)] has locked the disguise of the agent ID ([name]) with [W]")
+			return
+	. = ..()
+
 // broken chameleon agent card
 /obj/item/card/id/syndicate/broken
-	card_access = list() // their access is even broken
+	access = list() // their access is even broken
 
 /obj/item/card/id/syndicate/broken/afterattack(obj/item/O, mob/user, proximity)
 	return
@@ -549,12 +633,12 @@ update_label("John Doe", "Clowny")
 
 /obj/item/card/id/syndicate/nuke_leader
 	name = "lead agent card"
-	card_access = list(ACCESS_MAINT_TUNNELS, ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER)
+	access = list(ACCESS_MAINT_TUNNELS, ACCESS_SYNDICATE, ACCESS_SYNDICATE_LEADER)
 
 /obj/item/card/id/syndicate/ratvar
 	name = "servant ID card"
 	icon_state = "ratvar"
-	card_access = list(ACCESS_CLOCKCULT, ACCESS_MAINT_TUNNELS)
+	access = list(ACCESS_CLOCKCULT, ACCESS_MAINT_TUNNELS)
 	hud_state = JOB_HUD_UNKNOWN
 
 /obj/item/card/id/syndicate_command
@@ -563,7 +647,7 @@ update_label("John Doe", "Clowny")
 	registered_name = "Syndicate"
 	icon_state = "syndicate"
 	assignment = "Syndicate Officer"
-	card_access = list(ACCESS_SYNDICATE)
+	access = list(ACCESS_SYNDICATE)
 	hud_state = JOB_HUD_SYNDICATE
 
 /obj/item/card/id/syndicate/debug
@@ -576,7 +660,7 @@ update_label("John Doe", "Clowny")
 	hud_state = JOB_HUD_CENTCOM
 
 /obj/item/card/id/syndicate/debug/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_every_access())
+	access = get_every_access()
 	registered_account = SSeconomy.get_budget_account(ACCOUNT_VIP_ID)
 	. = ..()
 
@@ -593,7 +677,8 @@ update_label("John Doe", "Clowny")
 	hud_state = JOB_HUD_ACTINGCAPTAIN
 
 /obj/item/card/id/captains_spare/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
+	var/datum/job/captain/J = new/datum/job/captain
+	access = J.get_access()
 	. = ..()
 
 /obj/item/card/id/centcom
@@ -605,7 +690,7 @@ update_label("John Doe", "Clowny")
 	hud_state = JOB_HUD_CENTCOM
 
 /obj/item/card/id/centcom/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_centcom_access())
+	access = get_all_centcom_access()
 	. = ..()
 
 /obj/item/card/id/ert
@@ -617,9 +702,7 @@ update_label("John Doe", "Clowny")
 	hud_state = JOB_HUD_CENTCOM
 
 /obj/item/card/id/ert/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
-	grant_accesses_to_card(card_access, get_ert_access("commander"))
-	grant_accesses_to_card(card_access, ACCESS_CHANGE_IDS)
+	access = get_all_accesses()+get_ert_access("commander")-ACCESS_CHANGE_IDS
 	. = ..()
 
 /obj/item/card/id/ert/Security
@@ -628,9 +711,7 @@ update_label("John Doe", "Clowny")
 	icon_state = "ert"
 
 /obj/item/card/id/ert/Security/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
-	grant_accesses_to_card(card_access, get_ert_access("sec"))
-	grant_accesses_to_card(card_access, ACCESS_CHANGE_IDS)
+	access = get_all_accesses()+get_ert_access("sec")-ACCESS_CHANGE_IDS
 	. = ..()
 
 /obj/item/card/id/ert/Engineer
@@ -639,9 +720,7 @@ update_label("John Doe", "Clowny")
 	icon_state = "ert"
 
 /obj/item/card/id/ert/Engineer/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
-	grant_accesses_to_card(card_access, get_ert_access("eng"))
-	grant_accesses_to_card(card_access, ACCESS_CHANGE_IDS)
+	access = get_all_accesses()+get_ert_access("eng")-ACCESS_CHANGE_IDS
 	. = ..()
 
 /obj/item/card/id/ert/Medical
@@ -650,9 +729,7 @@ update_label("John Doe", "Clowny")
 	icon_state = "ert"
 
 /obj/item/card/id/ert/Medical/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
-	grant_accesses_to_card(card_access, get_ert_access("med"))
-	grant_accesses_to_card(card_access, ACCESS_CHANGE_IDS)
+	access = get_all_accesses()+get_ert_access("med")-ACCESS_CHANGE_IDS
 	. = ..()
 
 /obj/item/card/id/ert/chaplain
@@ -661,9 +738,7 @@ update_label("John Doe", "Clowny")
 	icon_state = "ert"
 
 /obj/item/card/id/ert/chaplain/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
-	grant_accesses_to_card(card_access, get_ert_access("sec"))
-	grant_accesses_to_card(card_access, ACCESS_CHANGE_IDS)
+	access = get_all_accesses()+get_ert_access("sec")-ACCESS_CHANGE_IDS
 	. = ..()
 
 /obj/item/card/id/ert/Janitor
@@ -672,7 +747,7 @@ update_label("John Doe", "Clowny")
 	icon_state = "ert"
 
 /obj/item/card/id/ert/Janitor/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
+	access = get_all_accesses()
 	. = ..()
 
 /obj/item/card/id/ert/kudzu
@@ -681,7 +756,7 @@ update_label("John Doe", "Clowny")
 	icon_state = "ert"
 
 /obj/item/card/id/ert/kudzu/Initialize(mapload)
-	grant_accesses_to_card(card_access, get_all_accesses())
+	access = get_all_accesses()
 	. = ..()
 
 /obj/item/card/id/ert/lawyer
@@ -691,9 +766,9 @@ update_label("John Doe", "Clowny")
 
 /obj/item/card/id/ert/lawyer/Initialize(mapload)
 	. = ..()
-	grant_accesses_to_card(card_access, list(ACCESS_CENT_GENERAL, ACCESS_COURT, ACCESS_BRIG, ACCESS_FORENSICS_LOCKERS))
+	access = list(ACCESS_CENT_GENERAL, ACCESS_COURT, ACCESS_BRIG, ACCESS_FORENSICS_LOCKERS)
 
-/obj/item/card/id/prisoner
+/obj/item/card/id/gulag
 	name = "prisoner ID card"
 	desc = "You are a number, you are not a free man."
 	icon_state = "orange"
@@ -705,7 +780,7 @@ update_label("John Doe", "Clowny")
 	var/permanent = FALSE
 	hud_state = JOB_HUD_PRISONER
 
-/obj/item/card/id/prisoner/examine(mob/user)
+/obj/item/card/id/gulag/examine(mob/user)
 	. = ..()
 
 	if(!permanent)
@@ -714,31 +789,31 @@ update_label("John Doe", "Clowny")
 	else
 		. += "<span class='notice'>The mark on the ID indicates the sentence is permanent.</span>"
 
-/obj/item/card/id/prisoner/one
+/obj/item/card/id/gulag/one
 	name = "Prisoner #13-001"
 	registered_name = "Prisoner #13-001"
 
-/obj/item/card/id/prisoner/two
+/obj/item/card/id/gulag/two
 	name = "Prisoner #13-002"
 	registered_name = "Prisoner #13-002"
 
-/obj/item/card/id/prisoner/three
+/obj/item/card/id/gulag/three
 	name = "Prisoner #13-003"
 	registered_name = "Prisoner #13-003"
 
-/obj/item/card/id/prisoner/four
+/obj/item/card/id/gulag/four
 	name = "Prisoner #13-004"
 	registered_name = "Prisoner #13-004"
 
-/obj/item/card/id/prisoner/five
+/obj/item/card/id/gulag/five
 	name = "Prisoner #13-005"
 	registered_name = "Prisoner #13-005"
 
-/obj/item/card/id/prisoner/six
+/obj/item/card/id/gulag/six
 	name = "Prisoner #13-006"
 	registered_name = "Prisoner #13-006"
 
-/obj/item/card/id/prisoner/seven
+/obj/item/card/id/gulag/seven
 	name = "Prisoner #13-007"
 	registered_name = "Prisoner #13-007"
 
@@ -746,7 +821,7 @@ update_label("John Doe", "Clowny")
 	name = "Golem Mining ID"
 	assignment = "Free Golem"
 	hud_state = JOB_HUD_RAWCARGO
-	card_access = list(ACCESS_MINING, ACCESS_MINING_STATION, ACCESS_MECH_MINING, ACCESS_MAILSORTING, ACCESS_MINERAL_STOREROOM)
+	access = list(ACCESS_MINING, ACCESS_MINING_STATION, ACCESS_MECH_MINING, ACCESS_MAILSORTING, ACCESS_MINERAL_STOREROOM)
 	var/need_setup = TRUE
 
 /obj/item/card/id/golem/Initialize(mapload)
@@ -771,7 +846,7 @@ update_label("John Doe", "Clowny")
 	icon_state = "paper"
 	armor = list(MELEE = 0,  BULLET = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, RAD = 0, FIRE = 0, ACID = 50, STAMINA = 0)
 	resistance_flags = null  // removes all resistance because its a piece of paper
-	card_access = list()
+	access = list()
 	assignment = "Unknown"
 	hud_state = JOB_HUD_PAPER
 	electric = FALSE
@@ -805,18 +880,18 @@ update_label("John Doe", "Clowny")
 	name = "\proper a perfectly generic identification card"
 	desc = "A perfectly generic identification card. Looks like it could use some flavor."
 	hud_state = JOB_HUD_UNKNOWN
-	card_access = list(ACCESS_AWAY_GENERAL)
+	access = list(ACCESS_AWAY_GENERAL)
 
 /obj/item/card/id/away/hotel
 	name = "Staff ID"
 	desc = "A staff ID used to access the hotel's doors."
 	hud_state = JOB_HUD_RAWSERVICE
-	card_access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_MAINT)
+	access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_MAINT)
 
 /obj/item/card/id/away/hotel/securty
 	name = "Officer ID"
 	hud_state = JOB_HUD_RAWSECURITY
-	card_access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_MAINT, ACCESS_AWAY_SEC)
+	access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_MAINT, ACCESS_AWAY_SEC)
 
 /obj/item/card/id/away/old
 	name = "\proper a perfectly generic identification card"
@@ -829,27 +904,27 @@ update_label("John Doe", "Clowny")
 	desc = "A faded Charlie Station ID card. You can make out the rank \"Security Officer\"."
 	assignment = "Charlie Station Security Officer"
 	hud_state = JOB_HUD_RAWSECURITY
-	card_access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_SEC)
+	access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_SEC)
 
 /obj/item/card/id/away/old/sci
 	name = "Charlie Station Scientist's ID card"
 	desc = "A faded Charlie Station ID card. You can make out the rank \"Scientist\"."
 	assignment = "Charlie Station Scientist"
 	hud_state = JOB_HUD_RAWSCIENCE
-	card_access = list(ACCESS_AWAY_GENERAL)
+	access = list(ACCESS_AWAY_GENERAL)
 
 /obj/item/card/id/away/old/eng
 	name = "Charlie Station Engineer's ID card"
 	desc = "A faded Charlie Station ID card. You can make out the rank \"Station Engineer\"."
 	assignment = "Charlie Station Engineer"
 	hud_state = JOB_HUD_RAWENGINEERING
-	card_access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_ENGINE)
+	access = list(ACCESS_AWAY_GENERAL, ACCESS_AWAY_ENGINE)
 
 /obj/item/card/id/away/old/apc
 	name = "APC Access ID"
 	desc = "A special ID card that allows access to APC terminals."
 	hud_state = JOB_HUD_UNKNOWN
-	card_access = list(ACCESS_ENGINE_EQUIP)
+	access = list(ACCESS_ENGINE_EQUIP)
 
 /obj/item/card/id/away/deep_storage //deepstorage.dmm space ruin
 	name = "bunker access ID"
@@ -1236,16 +1311,17 @@ update_label("John Doe", "Clowny")
 	. = ..()
 	if (!proximity)
 		return .
-	var/obj/item/card/id/promoted_id = target
-	if(istype(promoted_id))
-		if(!promoted_id.electric)
+	var/obj/item/card/id/idcard = target
+	if(istype(idcard))
+		if(!idcard.electric)
 			to_chat(user, to_chat(user, "<span class='warning'>You swipe the id card. Nothing happens. </span>"))
 			return
-		grant_accesses_to_card(promoted_id.card_access, src.card_access)
+		for(var/give_access in access)
+			idcard.access |= give_access
 		if(assignment!=initial(assignment))
-			promoted_id.assignment = assignment
+			idcard.assignment = assignment
 		if(name!=initial(name))
-			promoted_id.name = name
-		to_chat(user, "You upgrade your [promoted_id] with the [name].")
-		log_id("[key_name(user)] added access to '[promoted_id]' using [src] at [AREACOORD(user)].")
+			idcard.name = name
+		to_chat(user, "You upgrade your [idcard] with the [name].")
+		log_id("[key_name(user)] added access to '[idcard]' using [src] at [AREACOORD(user)].")
 		qdel(src)

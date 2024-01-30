@@ -87,7 +87,7 @@
 	. = ..()
 	GLOB.drones_list += src
 	access_card = new /obj/item/card/id(src)
-	grant_accesses_to_card(access_card.card_access, get_all_accesses())
+	access_card.access = get_all_accesses()
 
 	if(default_storage)
 		var/obj/item/I = new default_storage(src)
@@ -145,7 +145,7 @@
 /mob/living/simple_animal/drone/auto_deadmin_on_login()
 	if(!client?.holder)
 		return TRUE
-	if(CONFIG_GET(flag/auto_deadmin_silicons) || (client.prefs?.toggles & PREFTOGGLE_DEADMIN_POSITION_SILICON))
+	if(CONFIG_GET(flag/auto_deadmin_silicons) || client.prefs?.read_player_preference(/datum/preference/toggle/deadmin_position_silicon))
 		return client.holder.auto_deadmin()
 	return ..()
 
@@ -244,5 +244,5 @@
 	// Why would bees pay attention to drones?
 	return 1
 
-/mob/living/simple_animal/drone/electrocute_act(shock_damage, source, siemens_coeff = 1, safety = 0, tesla_shock = 0, illusion = 0, stun = TRUE)
+/mob/living/simple_animal/drone/electrocute_act(shock_damage, source, siemens_coeff, flags = NONE)
 	return 0 //So they don't die trying to fix wiring

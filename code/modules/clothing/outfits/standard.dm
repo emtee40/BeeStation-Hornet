@@ -51,7 +51,7 @@
 	suit = /obj/item/clothing/suit/armor/vest
 	head = /obj/item/clothing/head/helmet/thunderdome
 	r_hand = /obj/item/gun/energy/pulse/destroyer
-	l_hand = /obj/item/kitchen/knife
+	l_hand = /obj/item/knife/kitchen
 	r_pocket = /obj/item/grenade/smokebomb
 
 /datum/outfit/tournament/green
@@ -154,7 +154,7 @@
 	ears = /obj/item/radio/headset
 	glasses = /obj/item/clothing/glasses/thermal/monocle
 	suit = /obj/item/clothing/suit/hooded/chaplain_hoodie
-	l_pocket = /obj/item/reagent_containers/food/snacks/grown/banana
+	l_pocket = /obj/item/food/grown/banana
 	r_pocket = /obj/item/bikehorn
 	id = /obj/item/card/id
 	r_hand = /obj/item/fireaxe
@@ -164,7 +164,7 @@
 		return
 
 	var/obj/item/card/id/W = H.wear_id
-	grant_accesses_to_card(W.card_access, get_all_accesses())
+	W.access = get_all_accesses()
 	W.icon_state = "clown_op"
 	W.assignment = "Tunnel Clown!"
 	W.registered_name = H.real_name
@@ -181,7 +181,7 @@
 	ears = /obj/item/radio/headset
 	glasses = /obj/item/clothing/glasses/thermal/monocle
 	suit = /obj/item/clothing/suit/apron
-	l_pocket = /obj/item/kitchen/knife
+	l_pocket = /obj/item/knife/kitchen
 	r_pocket = /obj/item/scalpel
 	r_hand = /obj/item/fireaxe
 
@@ -228,7 +228,7 @@
 	pda.saved_job = "Reaper"
 
 	var/obj/item/card/id/syndicate/W = H.wear_id
-	grant_accesses_to_card(W.card_access, get_all_accesses())
+	W.access = get_all_accesses()
 	W.assignment = "Reaper"
 	W.registered_name = H.real_name
 	W.update_label(H.real_name)
@@ -266,8 +266,8 @@
 
 	var/obj/item/card/id/W = H.wear_id
 	W.icon_state = "centcom"
-	grant_accesses_to_card(W.card_access, get_all_accesses())
-	grant_accesses_to_card(W.card_access, get_centcom_access(JOB_CENTCOM_COMMANDER))
+	W.access = get_all_accesses()
+	W.access |= get_centcom_access(JOB_CENTCOM_COMMANDER)
 	W.assignment = JOB_CENTCOM_COMMANDER
 	W.registered_name = H.real_name
 	W.update_label()
@@ -295,8 +295,8 @@
 
 	var/obj/item/card/id/W = H.wear_id
 	W.icon_state = "centcom"
-	grant_accesses_to_card(W.card_access, get_all_accesses())
-	grant_accesses_to_card(W.card_access, get_centcom_access(JOB_CENTCOM_ADMIRAL))
+	W.access = get_all_accesses()
+	W.access |= get_centcom_access(JOB_CENTCOM_ADMIRAL)
 	W.assignment = JOB_CENTCOM_ADMIRAL
 	W.registered_name = H.real_name
 	W.update_label()
@@ -376,8 +376,8 @@
 
 	var/obj/item/card/id/silver/W = H.wear_id
 	W.icon_state = "centcom"
-	grant_accesses_to_card(W.card_access, get_all_accesses())
-	grant_accesses_to_card(W.card_access, get_centcom_access(JOB_CENTCOM_ADMIRAL))
+	W.access = get_all_accesses()
+	W.access |= get_centcom_access(JOB_CENTCOM_ADMIRAL)
 	W.assignment = JOB_CENTCOM_ADMIRAL
 	W.registered_name = H.real_name
 	W.update_label()

@@ -99,7 +99,7 @@
 	target = nTarget
 	update_text()
 
-/obj/item/paper/contract/infernal/suicide_act(mob/user)
+/obj/item/paper/contract/infernal/suicide_act(mob/living/user)
 	if(signed && (user == target.current) && istype(user, /mob/living/carbon/human/))
 		var/mob/living/carbon/human/H = user
 		H.say("OH GREAT INFERNO!  I DEMAND YOU COLLECT YOUR BOUNTY IMMEDIATELY!", forced = "infernal contract suicide")
@@ -291,15 +291,15 @@
 		id = worn.GetID()
 	if(id)
 		id.icon_state = "gold"
-		grant_accesses_to_card(id.card_access, get_all_accesses())
-		grant_accesses_to_card(id.card_access, get_all_centcom_access())
+		id.access = get_all_accesses()
+		id.access |= get_all_centcom_access()
 		id.assignment = JOB_NAME_CAPTAIN
 		id.update_label()
 	else
 		id = new /obj/item/card/id/gold(user.loc)
 		id.registered_name = user.real_name
-		grant_accesses_to_card(id.card_access, get_all_accesses())
-		grant_accesses_to_card(id.card_access, get_all_centcom_access())
+		id.access = get_all_accesses()
+		id.access |= get_all_centcom_access()
 		id.assignment = JOB_NAME_CAPTAIN
 		id.update_label()
 		if(worn)
