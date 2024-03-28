@@ -39,7 +39,7 @@
 
 /datum/addiction/stimulants/withdrawal_enters_stage_3(mob/living/carbon/affected_carbon)
 	. = ..()
-	affected_carbon.add_movespeed_modifier(MOVESPEED_ID_STIMULANTS, TRUE, 100, override=TRUE, multiplicative_slowdown = 1)
+	affected_carbon.add_movespeed_modifier(/datum/movespeed_modifier/stimulants)
 
 /datum/addiction/stimulants/end_withdrawal(mob/living/carbon/affected_carbon)
 	. = ..()
