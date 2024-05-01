@@ -7,6 +7,13 @@
 	var/hud_type = "gangster"
 	var/message_name = "Gangster"
 	var/datum/team/gang/gang
+	var/datum/gang_tracker/gang_tracker = new
+	var/datum/action/innate/gang_tracker/tracker_action
+
+/datum/antagonist/gang/Destroy()
+	QDEL_NULL(gang_tracker)
+	QDEL_NULL(tracker_action)
+	return ..()
 
 /datum/antagonist/gang/can_be_owned(datum/mind/new_owner)
 	. = ..()
@@ -16,6 +23,8 @@
 
 /datum/antagonist/gang/apply_innate_effects(mob/living/mob_override)
 	var/mob/living/M = mob_override || owner.current
+	tracker_action = new(gang_tracker)
+	tracker_action.Grant(owner.current)
 	update_gang_icons_added(M)
 
 /datum/antagonist/gang/remove_innate_effects(mob/living/mob_override)
@@ -32,15 +41,21 @@
 
 /datum/antagonist/gang/farewell()
 	if(ishuman(owner.current))
-		owner.current.visible_message("<span class='deconversion_message'>[owner.current] looks like [owner.current.p_theyve()] just remembered [owner.current.p_their()] real allegiance!</span>", null, null, null, owner.current)
 		to_chat(owner, "<span class='userdanger'>You are no longer a gangster!</span>")
 
 /datum/antagonist/gang/on_gain()
 	if(!gang)
 		create_team()
+	add_to_gang()
+	add_objectives()
 	..()
 	handle_clown_mutation(owner.current, "Your training has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself.")
-	add_to_gang()
+
+
+/datum/antagonist/gang/proc/add_objectives()
+	for(var/datum/objective/objective in (gang.objectives-objectives))
+		log_objective(owner, objective.explanation_text)
+	objectives |= gang.objectives
 
 /datum/antagonist/gang/on_removal()
 	handle_clown_mutation(owner.current, removing=FALSE)
@@ -50,11 +65,35 @@
 /datum/antagonist/gang/create_team(team)
 	if(!gang) // add_antag_datum calls create_team, so we need to avoid generating two gangs in that case
 		if(team)
+			if(owner.has_antag_datum(/datum/antagonist/gang/boss))
+				var/datum/team/gang/gang_setup = team
+				var/datum/objective/gang/gang_objective = new
+				gang_objective.team = gang_setup
+				gang_setup.objectives += gang_objective
+
+				var/datum/objective/protect/protect_boss = new
+				protect_boss.set_target(owner) //Protect the gang boss
+				protect_boss.explanation_text = "Protect [protect_boss.target.name], your Gang Boss."
+				protect_boss.team = gang_setup
+				gang_setup.objectives += protect_boss
+
 			gang = team
 			return
 		var/datum/team/gang/gangteam = pick_n_take(GLOB.possible_gangs)
 		if(gangteam)
-			gang = new gangteam
+			var/datum/team/gang/gang_setup = new gangteam
+
+			var/datum/objective/gang/gang_objective = new
+			gang_objective.team = gang_setup
+			gang_setup.objectives += gang_objective
+
+			var/datum/objective/protect/protect_boss = new
+			protect_boss.set_target(owner) //Protect the gang boss
+			protect_boss.explanation_text = "Protect [protect_boss.target.name], your Gang Boss."
+			protect_boss.team = gang_setup
+			gang_setup.objectives += protect_boss
+
+			gang = gang_setup
 
 /datum/antagonist/gang/proc/equip_gang() // Bosses get equipped with their tools
 	return
@@ -75,15 +114,6 @@
 		ganghud.leave_hud(M)
 		set_antag_hud(M, null)
 
-/datum/antagonist/gang/proc/can_be_converted(mob/living/candidate)
-	if(!candidate.mind)
-		return FALSE
-	if(!can_be_owned(candidate.mind))
-		return FALSE
-	var/mob/living/carbon/human/H = candidate
-	if(!istype(H)) //Can't nonhumans
-		return FALSE
-	return TRUE
 
 /datum/antagonist/gang/proc/promote() // Bump up to boss
 	var/datum/team/gang/old_gang = gang
@@ -113,10 +143,11 @@
 			return
 		else if(newgang == "Random")
 			var/datum/team/gang/G = pick_n_take(GLOB.possible_gangs)
-			gang = new G
+			create_team(G)
 		else
 			GLOB.possible_gangs -= newgang
-			gang = new newgang
+			var/datum/team/gang/G = new newgang
+			create_team(G)
 	else
 		if(!GLOB.gangs.len) // no gangs exist
 			to_chat(admin, "<span class='danger'>No gangs exist, please create a new one instead.</span>")
@@ -145,10 +176,16 @@
 
 /datum/antagonist/gang/proc/add_to_gang()
 	gang.add_member(owner)
+	var/mob/living/carbon/human/H = owner.current
+	if(H.get_bank_account())
+		gang.bank_accounts += H.get_bank_account()
 	owner.current.log_message("<font color='red'>Has been converted to the [gang.name] gang!</font>", INDIVIDUAL_ATTACK_LOG)
 
 /datum/antagonist/gang/proc/remove_from_gang()
 	gang.remove_member(owner)
+	var/mob/living/carbon/human/H = owner.current
+	if(H.get_bank_account())
+		gang.bank_accounts -= H.get_bank_account()
 	owner.current.log_message("<font color='red'>Has been deconverted from the [gang.name] gang!</font>", INDIVIDUAL_ATTACK_LOG)
 
 // Boss type. Those can use gang tools to buy items for their gang, in particular the Dominator, used to win the gamemode, along with more gang tools to promote fellow gangsters to boss status.
@@ -156,9 +193,19 @@
 	name = "Gang boss"
 	hud_type = "gang_boss"
 	message_name = "Leader"
+	var/datum/action/innate/gang/invitation/invite = new
+	var/datum/action/innate/gang/promote/promote = new
+	ui_name = "AntagInfoGangBoss"
+
+/datum/antagonist/gang/boss/Destroy()
+	QDEL_NULL(invite)
+	return ..()
+
 
 /datum/antagonist/gang/boss/on_gain()
 	..()
+	if(!owner.has_antag_datum(/datum/antagonist/gang/boss/lieutenant))
+		equip_gang(TRUE,FALSE)
 	if(gang)
 		gang.leaders += owner
 
@@ -167,10 +214,28 @@
 		gang.leaders -= owner
 	..()
 
+/datum/antagonist/gang/boss/apply_innate_effects(mob/living/mob_override)
+	. = ..()
+	invite.Grant(owner.current)
+	if(promote)
+		promote.Grant(owner.current)
+
+/datum/antagonist/gang/boss/remove_innate_effects(mob/living/mob_override)
+	. = ..()
+	invite.Remove(owner.current)
+	if(promote)
+		promote.Remove(owner.current)
+
+/datum/antagonist/gang/boss/ui_static_data(mob/user)
+	var/list/data = list()
+	data["antag_name"] = name
+	data["gang"] = gang
+	return data
+
 /datum/antagonist/gang/boss/antag_listing_name()
 	return ..() + "(Boss)"
 
-/datum/antagonist/gang/boss/equip_gang(gangtool = TRUE, pen = TRUE, spraycan = TRUE, hud = TRUE) // usually has to be called separately
+/datum/antagonist/gang/boss/equip_gang(gangtool = TRUE, spraycan = TRUE) // usually has to be called separately
 	var/mob/living/carbon/human/H = owner.current
 	if(!istype(H))
 		return
@@ -183,22 +248,13 @@
 	)
 
 	if(gangtool)
-		var/obj/item/device/gangtool/G = new()
+		var/obj/item/device/gangtool/G = new(owner.current.loc)
 		var/where = H.equip_in_one_of_slots(G, slots)
 		if (!where)
 			to_chat(H, "Your Syndicate benefactors were unfortunately unable to get you a Gangtool.")
 		else
-			G.register_device(H)
 			to_chat(H, "The <b>Gangtool</b> in your [where] will allow you to purchase weapons and equipment, send messages to your gang, and recall the emergency shuttle from anywhere on the station.")
 			to_chat(H, "As the gang boss, you can also promote your gang members to <b>lieutenant</b>. Unlike regular gangsters, Lieutenants cannot be deconverted and are able to use recruitment pens and gangtools.")
-
-	if(pen)
-		var/obj/item/pen/gang/T = new()
-		var/where2 = H.equip_in_one_of_slots(T, slots)
-		if (!where2)
-			to_chat(H, "Your Syndicate benefactors were unfortunately unable to get you a recruitment pen to start.")
-		else
-			to_chat(H, "The <b>recruitment pen</b> in your [where2] will help you get your gang started. Stab unsuspecting crew members with it to recruit them.")
 
 	if(spraycan)
 		var/obj/item/toy/crayon/spraycan/gang/SC = new(null,gang)
@@ -208,13 +264,6 @@
 		else
 			to_chat(H, "The <b>territory spraycan</b> in your [where3] can be used to claim areas of the station for your gang. The more territory your gang controls, the more influence you get. All gangsters can use these, so distribute them to grow your influence faster.")
 
-	if(hud)
-		var/obj/item/clothing/glasses/hud/security/chameleon/C = new(null,gang)
-		var/where4 = H.equip_in_one_of_slots(C, slots)
-		if (!where4)
-			to_chat(H, "Your Syndicate benefactors were unfortunately unable to get you a chameleon security HUD.")
-		else
-			to_chat(H, "The <b>chameleon security HUD</b> in your [where4] will help you keep track of who is mindshield-implanted, and unable to be recruited.")
 
 // Admin commands for bosses
 /datum/antagonist/gang/boss/admin_add(datum/mind/new_owner,mob/admin)
@@ -267,13 +316,15 @@
 /datum/antagonist/gang/boss/lieutenant
 	name = "Gang Lieutenant"
 	message_name = "Lieutenant"
+	promote = null
 
 #define INFLUENCE_SWAG 2
-#define INFLUENCE_TERRITORY 0
+#define INFLUENCE_TERRITORY 5
+#define REPUTATION_TERRITORY 1
 #define INFLUENCE_BASE 20
 
 #define MAXIMUM_RECALLS 1
-#define INFLUENCE_INTERVAL 1800
+#define INFLUENCE_INTERVAL 1200
 // Gang team datum. This handles the gang itself.
 /datum/team/gang
 	name = "Gang"
@@ -281,19 +332,23 @@
 	var/hud_entry_num
 	var/list/leaders = list() // bosses
 	var/max_leaders = MAX_LEADERS_GANG
-	var/list/territories = list() // territories owned by the gang.
-	var/list/lost_territories = list() // territories lost by the gang.
-	var/list/new_territories = list() // territories captured by the gang.
+	var/max_members = MAX_MEMBERS_GANG
+	var/list/territories = list() // owned territories.
 	var/list/gangtools = list()
 	var/color
-	var/winner = FALSE //winner winner chicken dinner
+	var/winner = FALSE
 	var/influence = 0 // influence of the gang, based on how many territories they own. Can be used to buy weapons and tools from a gang uplink.
-	var/victory_points = 0 // influence earned throughout the round, used at eotg to calculate most efficient gang
+	var/queued_influence = 0 // influence waiting to be added to the gang.
+	var/reputation = 0 // earned by various means throught the round, decides the winner.
+	var/queued_reputation = 0 // reputation waiting to be added to the gang.
+	var/credits = 0 //ammount of money the gang has.
+	var/richest = FALSE //Are we the gang with the most money?
+	var/list/datum/bank_account/bank_accounts = list() //bank accounts owned by gang members and bank "accounts" stored in safes
 	var/next_point_time
-	var/recalls = MAXIMUM_RECALLS // Once this reaches 0, this gang cannot force recall the shuttle with their gangtool anymore
 	var/obj/item/clothing/head/hat
 	var/obj/item/clothing/under/outfit
 	var/obj/item/clothing/suit/suit
+	var/counting_credits = FALSE
 
 /datum/team/gang/New(starting_members)
 	. = ..()
@@ -314,7 +369,7 @@
 				CJ.add_antag_datum(bossdatum, src)
 				bossdatum.equip_gang()
 	next_point_time = world.time + INFLUENCE_INTERVAL
-	addtimer(CALLBACK(src, PROC_REF(handle_territories)), INFLUENCE_INTERVAL)
+	addtimer(CALLBACK(src, PROC_REF(handle_resources)), INFLUENCE_INTERVAL)
 
 /datum/team/gang/Destroy()
 	GLOB.gangs -= src
@@ -342,69 +397,54 @@
 	to_chat(gangster, "<font color='red'>You can identify your mates by their <b>large, bright \[G\] <font color='[color]'>icon</font></b>.</font>")
 	gangster.store_memory("You are a member of the [name] Gang!")
 
-/datum/team/gang/proc/handle_territories()	//influence is counted here
+//this proc could be problematic if scores are really close and it triggers on one gang before another.
+/datum/team/gang/proc/handle_resources()	//influence reputation and credits are counted here
 	next_point_time = world.time + INFLUENCE_INTERVAL
-	if(!leaders.len)
-		return
-	var/added_names = ""
-	var/lost_names = ""
 
-	//Re-add territories that were reclaimed, so if they got tagged over, they can still earn income if they tag it back before the next status report
-	var/list/reclaimed_territories = new_territories & lost_territories
-	territories |= reclaimed_territories
-	new_territories -= reclaimed_territories
-	lost_territories -= reclaimed_territories
+	// counting our credits
+	credits = 0
+	for(var/datum/bank_account/account as() in bank_accounts)
+		if(istype(account,/datum/bank_account/gang)) //Money kept in safes counts double, lucky you!
+			credits += account.account_balance * 2
+			continue
+		credits += account.account_balance
 
-	//Process lost territories
-	for(var/area in lost_territories)
-		if(lost_names != "")
-			lost_names += ", "
-		lost_names += "[lost_territories[area]]"
-		territories -= area
+	if(!counting_credits)
+		if((world.time - SSticker.round_start_time) > 10 MINUTES) //We start taking reputation from credits into account at this point, before 10 mins it's a grace period
+			counting_credits = TRUE
+	//are we the richest gang on the station?
+	if(counting_credits)
+		richest = TRUE
+		var/datum/team/gang/richest_gang = src
+		var/richest_credits = credits
+		for(var/datum/team/gang/opponent as() in GLOB.gangs)
+			if(opponent.credits > richest_credits)
+				richest_gang.richest = FALSE
+				richest_gang = opponent
+				richest_credits = opponent.credits
+				opponent.richest = TRUE
 
-	//Calculate and report influence growth
+		if(richest)
+			queued_influence += 50
+			queued_reputation += 15
+		else
+			queued_influence += 50 * (richest_gang.credits / credits) //we get a share of the profits but none of the glory
 
-	//Process new territories
-	for(var/area in new_territories)
-		if(added_names != "")
-			added_names += ", "
-		added_names += "[new_territories[area]]"
-		territories += area
+	influence =	update_influence() + queued_influence
+	queued_influence = 0
 
-	//Report territory changes
-	var/message = "<b>[src] Gang Status Report:</b>.<BR>*---------*<BR>"
-	message += "<b>[new_territories.len] new territories:</b><br><i>[added_names]</i><br>"
-	message += "<b>[lost_territories.len] territories lost:</b><br><i>[lost_names]</i><br>"
-	//Clear the lists
-	new_territories = list()
-	lost_territories = list()
-	var/total_territories = total_claimable_territories()
-	var/control = round((territories.len/total_territories)*100, 1)
-	var/uniformed = count_gang_swag()
-	message += "Your gang now has <b>[control]% control</b> of the station.<BR>*---------*<BR>"
-
-	var/new_influence = update_influence()
-	influence =	min(999,influence+new_influence)
-	victory_points += new_influence
-	if(new_influence > 0)
-		message += "Gang influence has increased by [new_influence] for defending [territories.len] territories and [uniformed] swag.<BR>"
-	message += "Your gang now has <b>[influence] influence</b>.<BR>"
-
-	message_gangtools(message)
-	addtimer(CALLBACK(src, PROC_REF(handle_territories)), INFLUENCE_INTERVAL)
+	reputation = update_reputation() + queued_reputation
+	queued_reputation = 0
 
 
-/datum/team/gang/proc/total_claimable_territories()
-	var/list/valid_territories = list()
-	for(var/z in SSmapping.levels_by_trait(ZTRAIT_STATION)) //First, collect all area types on the station zlevel
-		for(var/ar in SSmapping.areas_in_z["[z]"])
-			var/area/A = ar
-			if(!(A.type in valid_territories) && A.area_flags & VALID_TERRITORY)
-				valid_territories |= A.type
-	return valid_territories.len
+
+	addtimer(CALLBACK(src, PROC_REF(handle_resources)), INFLUENCE_INTERVAL)
 
 /datum/team/gang/proc/update_influence()
 	return min(999,influence + INFLUENCE_BASE + (count_gang_swag()) + LAZYLEN(territories) * INFLUENCE_TERRITORY)
+
+/datum/team/gang/proc/update_reputation()
+	return reputation + LAZYLEN(territories) * REPUTATION_TERRITORY
 
 /datum/team/gang/proc/count_gang_swag()
 	//Count swag on gangsters
@@ -417,14 +457,20 @@
 /datum/team/gang/proc/check_gangster_swag(var/mob/living/carbon/human/gangster)
 	//Gangster must be alive and on station
 	var/swag = 1
+	var/wearing
 	if((gangster.stat == DEAD) || !(is_station_level(gangster.z)))
 		return FALSE
 	if (gangster.w_uniform?.type == outfit)
 		swag *= INFLUENCE_SWAG
+		wearing = TRUE
 	if (gangster.wear_suit?.type == suit)
 		swag *= INFLUENCE_SWAG
+		wearing = TRUE
 	if (gangster.head?.type == hat)
 		swag *= INFLUENCE_SWAG
+		wearing = TRUE
+	if(!wearing)
+		return -3 //your punishment for being swagless
 	return swag
 
 /datum/team/gang/proc/adjust_influence(value)
@@ -447,4 +493,5 @@
 #undef INFLUENCE_INTERVAL
 #undef INFLUENCE_SWAG
 #undef INFLUENCE_TERRITORY
+#undef REPUTATION_TERRITORY
 #undef INFLUENCE_BASE

@@ -5,6 +5,7 @@
 // You also need to make a gang graffiti, that will go in crayondecal.dmi inside our icons(not tg's), with the same name of the gang it's assigned to. Nothing else,just the icon.
 // Those are all required. If one is missed, stuff could break.
 
+
 /datum/team/gang/clandestine
 	name = "Clandestine"
 	color = "#FF0000"
@@ -123,6 +124,8 @@
 	hat = /obj/item/clothing/head/fedora
 	outfit = /obj/item/clothing/under/color/white
 	suit = /obj/item/clothing/suit/nerdshirt
+/*
+Commented because Carp hood is a bit broken
 
 /datum/team/gang/sleepingcarp
 	name = "Sleeping Carp"
@@ -130,7 +133,7 @@
 	outfit = /obj/item/clothing/under/color/lightpurple
 	suit = /obj/item/clothing/suit/toggle/lawyer/purple
 	hat = /obj/item/clothing/head/hooded/carp_hood
-
+*/
 /datum/team/gang/rigatonifamily
 	name = "Rigatoni family"
 	color = "#cc9900" // p a s t a colored
