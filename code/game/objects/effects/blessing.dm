@@ -9,13 +9,10 @@
 
 /obj/effect/blessing/Initialize(mapload)
 	. = ..()
-	for(var/obj/effect/blessing/B in loc)
-		if(B != src)
-			return INITIALIZE_HINT_QDEL
-		var/image/I = image(icon = 'icons/effects/effects.dmi', icon_state = "blessed", layer = ABOVE_OPEN_TURF_LAYER, loc = src)
-		I.alpha = 64
-		I.appearance_flags = RESET_ALPHA
-		add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/blessedAware, "blessing", I)
+	var/image/holy_effect = image(icon = 'icons/effects/effects.dmi', icon_state = "blessed", layer = ABOVE_OPEN_TURF_LAYER, loc = src)
+	holy_effect.alpha = 64
+	holy_effect.appearance_flags = RESET_ALPHA
+	SSclient_vision.safe_stack_client_images(src, CLIVIS_KEY_HOLYTURF, holy_effect, cve_flags = CVE_FLAGS_CUT_IMAGE_ON_QDEL)
 	RegisterSignal(loc, COMSIG_ATOM_INTERCEPT_TELEPORT, PROC_REF(block_cult_teleport))
 
 /obj/effect/blessing/Destroy()

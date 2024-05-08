@@ -225,6 +225,14 @@
 	var/crit_refund = 50 //5 seconds when putting a target into critical
 	var/kill_refund = 250 //full refund on kills
 
+/mob/living/simple_animal/hostile/construct/wraith/Initialize(mapload)
+	. = ..()
+	SSclient_vision.grant_vision_key_to_mob(CLIVIS_KEY_HOLYTURF, src) // not every cultist sees that. Only visible by wraith construct
+
+/mob/living/simple_animal/hostile/construct/wraith/Destroy()
+	. = ..()
+	SSclient_vision.revoke_vision_key_from_mob(CLIVIS_KEY_HOLYTURF, src)
+
 /mob/living/simple_animal/hostile/construct/wraith/AttackingTarget() //refund jaunt cooldown when attacking living targets
 	var/prev_stat
 	if(isliving(target) && !iscultist(target))

@@ -52,6 +52,7 @@
 
 	//readd this mob's HUDs (antag, med, etc)
 	reload_huds()
+	SSclient_vision.on_mob_log_on(src)
 
 	reload_fullscreen() // Reload any fullscreen overlays this mob has.
 
@@ -99,7 +100,6 @@
 	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_MOB_LOGGED_IN, src)
 
 	AddElement(/datum/element/weather_listener, /datum/weather/ash_storm, ZTRAIT_ASHSTORM, GLOB.ash_storm_sounds)
-
 
 /**
   * Checks if the attached client is an admin and may deadmin them
