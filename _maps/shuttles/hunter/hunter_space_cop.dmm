@@ -496,6 +496,19 @@
 /obj/machinery/atmospherics/pipe/manifold4w/purple/hidden,
 /turf/open/floor/engine,
 /area/shuttle/hunter)
+"oP" = (
+/obj/effect/decal/cleanable/dirt/dust,
+/obj/effect/decal/cleanable/dirt/dust,
+/obj/effect/decal/cleanable/generic,
+/obj/effect/decal/cleanable/vomit/old{
+	pixel_x = 5
+	},
+/obj/machinery/light/small,
+/obj/structure/toilet/secret{
+	contents = /obj/item/clothing/head/helmet/toggleable/justice
+	},
+/turf/open/floor/iron/showroomfloor,
+/area/shuttle/hunter)
 "pY" = (
 /obj/structure/table/reinforced{
 	color = "#c1b6a5"
@@ -752,19 +765,6 @@
 /obj/item/storage/firstaid/medical,
 /turf/open/floor/iron/grid/steel,
 /area/shuttle/hunter)
-"Cc" = (
-/obj/effect/decal/cleanable/dirt/dust,
-/obj/effect/decal/cleanable/dirt/dust,
-/obj/effect/decal/cleanable/generic,
-/obj/effect/decal/cleanable/vomit/old{
-	pixel_x = 5
-	},
-/obj/machinery/light/small,
-/obj/structure/toilet/secret{
-	contents = /obj/item/clothing/head/helmet/toggleable/justice
-	},
-/turf/open/floor/iron/showroomfloor,
-/area/shuttle/hunter)
 "CE" = (
 /obj/structure/rack,
 /obj/item/melee/baton/loaded{
@@ -818,6 +818,32 @@
 	pixel_x = -8;
 	pixel_y = 9
 	},
+/turf/open/floor/iron/tech/grid,
+/area/shuttle/hunter)
+"Db" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/closet/secure_closet{
+	icon_state = "sec";
+	name = "equipment locker";
+	req_access_txt = "181"
+	},
+/obj/item/storage/belt/military,
+/obj/item/storage/belt/military,
+/obj/item/clothing/suit/armor/vest/blueshirt,
+/obj/item/clothing/suit/armor/vest/blueshirt,
+/obj/item/clothing/suit/armor/bulletproof,
+/obj/item/clothing/head/helmet/alt,
+/obj/item/clothing/head/helmet/alt,
+/obj/item/clothing/head/helmet/toggleable/riot,
+/obj/item/clothing/glasses/hud/security/sunglasses,
+/obj/item/clothing/glasses/hud/security/sunglasses,
+/obj/effect/turf_decal/bot_red,
+/obj/item/clothing/glasses/hud/security,
+/obj/item/clothing/glasses/hud/security,
+/obj/item/clothing/glasses/hud/security,
+/obj/item/clothing/suit/armor/bulletproof,
 /turf/open/floor/iron/tech/grid,
 /area/shuttle/hunter)
 "Dn" = (
@@ -899,6 +925,51 @@
 	req_access_txt = "181"
 	},
 /turf/open/floor/iron/tech/grid,
+/area/shuttle/hunter)
+"Gx" = (
+/obj/effect/turf_decal/siding/white{
+	dir = 4
+	},
+/obj/structure/closet/crate/bin,
+/obj/item/trash/candy,
+/obj/item/plate,
+/obj/item/trash/cheesie{
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/obj/item/trash/sosjerky{
+	pixel_x = -3;
+	pixel_y = -3
+	},
+/obj/effect/decal/cleanable/shreds{
+	pixel_x = -5;
+	pixel_y = -11
+	},
+/obj/item/cigbutt,
+/obj/item/cigbutt{
+	pixel_y = -6
+	},
+/obj/item/cigbutt{
+	pixel_y = 1;
+	pixel_x = -4
+	},
+/obj/item/cigbutt{
+	pixel_y = -3;
+	pixel_x = -4
+	},
+/obj/item/cigbutt{
+	pixel_x = -9;
+	pixel_y = -2
+	},
+/obj/item/cigbutt{
+	pixel_y = 4;
+	pixel_x = -4
+	},
+/obj/machinery/airalarm/directional/east{
+	req_access = null;
+	req_access_txt = "181"
+	},
+/turf/open/floor/iron,
 /area/shuttle/hunter)
 "GC" = (
 /turf/closed/wall/mineral/titanium/nodiagonal,
@@ -1144,32 +1215,6 @@
 /obj/effect/decal/cleanable/vomit/old,
 /turf/open/floor/wood,
 /area/shuttle/hunter)
-"PW" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/closet/secure_closet{
-	icon_state = "sec";
-	name = "equipment locker";
-	req_access_txt = "181"
-	},
-/obj/item/storage/belt/military,
-/obj/item/storage/belt/military,
-/obj/item/clothing/suit/armor/vest/blueshirt,
-/obj/item/clothing/suit/armor/vest/blueshirt,
-/obj/item/clothing/suit/armor/bulletproof,
-/obj/item/clothing/head/helmet/alt,
-/obj/item/clothing/head/helmet/alt,
-/obj/item/clothing/head/helmet/toggleable/riot,
-/obj/item/clothing/glasses/hud/security/sunglasses,
-/obj/item/clothing/glasses/hud/security/sunglasses,
-/obj/effect/turf_decal/bot_red,
-/obj/item/clothing/glasses/hud/security,
-/obj/item/clothing/glasses/hud/security,
-/obj/item/clothing/glasses/hud/security,
-/obj/item/clothing/suit/armor/bulletproof,
-/turf/open/floor/iron/tech/grid,
-/area/shuttle/hunter)
 "Ri" = (
 /obj/machinery/computer/shuttle_flight/hunter{
 	dir = 8
@@ -1268,51 +1313,6 @@
 	dir = 1
 	},
 /turf/open/floor/engine,
-/area/shuttle/hunter)
-"TV" = (
-/obj/effect/turf_decal/siding/white{
-	dir = 4
-	},
-/obj/structure/closet/crate/bin,
-/obj/item/trash/candy,
-/obj/item/trash/plate,
-/obj/item/trash/cheesie{
-	pixel_x = 4;
-	pixel_y = -4
-	},
-/obj/item/trash/sosjerky{
-	pixel_x = -3;
-	pixel_y = -3
-	},
-/obj/effect/decal/cleanable/shreds{
-	pixel_x = -5;
-	pixel_y = -11
-	},
-/obj/item/cigbutt,
-/obj/item/cigbutt{
-	pixel_y = -6
-	},
-/obj/item/cigbutt{
-	pixel_y = 1;
-	pixel_x = -4
-	},
-/obj/item/cigbutt{
-	pixel_y = -3;
-	pixel_x = -4
-	},
-/obj/item/cigbutt{
-	pixel_x = -9;
-	pixel_y = -2
-	},
-/obj/item/cigbutt{
-	pixel_y = 4;
-	pixel_x = -4
-	},
-/obj/machinery/airalarm/directional/east{
-	req_access = null;
-	req_access_txt = "181"
-	},
-/turf/open/floor/iron,
 /area/shuttle/hunter)
 "Ua" = (
 /obj/machinery/atmospherics/components/unary/plasma_refiner,
@@ -1532,7 +1532,7 @@ iD
 (8,1,1) = {"
 iD
 GC
-Cc
+oP
 GC
 Dn
 je
@@ -1551,7 +1551,7 @@ Sf
 dM
 nz
 Zk
-TV
+Gx
 gd
 Bx
 GC
@@ -1645,7 +1645,7 @@ iD
 iD
 wV
 GC
-PW
+Db
 Ew
 GC
 GC
