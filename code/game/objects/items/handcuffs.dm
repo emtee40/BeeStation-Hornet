@@ -199,6 +199,14 @@
 /obj/item/restraints/handcuffs/cable/zipties/used/attack()
 	return
 
+/obj/item/restraints/handcuffs/cable/zipties/beepsky
+	name = "beepsky zipties"
+	desc = "Cheap plastic disposable zipties that beepsky use to handcuff criminals."
+	icon_state = "cuff"
+	custom_materials = null
+	breakouttime = 150
+	trashtype = /obj/item/restraints/handcuffs/cable/zipties/used
+
 //Legcuffs
 
 /obj/item/restraints/legcuffs
