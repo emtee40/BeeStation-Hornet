@@ -60,5 +60,11 @@
 	var/lastpuke = 0
 	var/last_fire_update
 
+	/// The core temperature of the human compaired to the skin temp of the body
+	var/coretemperature = BODYTEMP_NORMAL
+
+	///Exposure to damaging heat levels increases stacks, stacks clean over time when temperatures are lower. Stack is consumed to add a wound.
+	var/heat_exposure_stacks = 0
+
 	///human specific screwyhuds from hallucinations (define key (bodypart) to int value (severity)) - see /datum/hallucination/fake_health_doll
 	var/hallucination_screwydoll
