@@ -155,16 +155,23 @@
 		var/obj/item/thing = sloties
 		. += thing?.slowdown
 
-/mob/living/carbon/human/doUnEquip(obj/item/I, force, newloc, no_move, invdrop = TRUE, was_thrown = FALSE, silent = FALSE)
+/mob/living/carbon/human/doUnEquip(obj/item/I, force, newloc, no_move, invdrop = TRUE, was_thrown = FALSE, silent = FALSE, bypass_delay = TRUE)
 	var/index = get_held_index_of_item(I)
-	. = ..(I, force, newloc, no_move, invdrop, was_thrown) //See mob.dm for an explanation on this and some rage about people copypasting instead of calling ..() like they should.
-	if(!. || !I)
-		return
 	if(index && !QDELETED(src) && dna.species.mutanthands) //hand freed, fill with claws, skip if we're getting deleted.
 		put_in_hand(new dna.species.mutanthands(), index)
+	if(!bypass_delay)
+		if(!(I in held_items) && I == head || I == wear_suit || I == shoes || I == gloves || I == wear_mask || I == w_uniform) //only apply to shit in said slots, never to items that aren't actually worn.
+			if (I.strip_delay_self)
+				var/mob/living/carbon/human/H = src
+				H.visible_message("<span class='notice'>[H] starts taking off [I]...</span>", "<span class='notice'>You start taking off [I]...</span>")
+				H.balloon_alert_to_viewers("[H] starts taking off [I]...", "You start taking off [I]...")
+				playsound(H, 'sound/effects/equip.ogg', 60)
+				if(!do_after(H, I.strip_delay_self))
+					if(s_store && invdrop)
+						return FALSE
 	if(I == wear_suit)
 		if(s_store && invdrop)
-			dropItemToGround(s_store, TRUE) //It makes no sense for your suit storage to stay on you if you drop your suit.
+			dropItemToGround(s_store, TRUE, FALSE, FALSE, TRUE) //It makes no sense for your suit storage to stay on you if you drop your suit.
 		if(wear_suit.breakouttime) //when unequipping a straightjacket
 			REMOVE_TRAIT(src, TRAIT_RESTRAINED, SUIT_TRAIT)
 			REMOVE_TRAIT(src, TRAIT_HANDS_BLOCKED, SUIT_TRAIT)
@@ -236,6 +243,9 @@
 		s_store = null
 		if(!QDELETED(src))
 			update_inv_s_store()
+	. = ..(I, force, newloc, no_move, invdrop, was_thrown) //See mob.dm for an explanation on this and some rage about people copypasting instead of calling ..() like they should.
+	if(!. || !I)
+		return
 
 	// Send a signal for when we unequip an item that used to cover our feet/shoes. Used for bloody feet
 	if((I.body_parts_covered & FEET) || (I.flags_inv | I.transparent_protection) & HIDESHOES)
