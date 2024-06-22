@@ -50,15 +50,6 @@
 	},
 /turf/open/floor/carpet/green,
 /area/crew_quarters/bar)
-"aak" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/obj/structure/bed/roller,
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/freezer,
-/area/medical/genetics)
 "aal" = (
 /obj/structure/transit_tube/curved{
 	dir = 1
@@ -75,16 +66,6 @@
 	},
 /turf/open/floor/iron,
 /area/maintenance/starboard/aft)
-"aan" = (
-/obj/structure/bed/roller,
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/freezer,
-/area/medical/genetics)
-"aao" = (
-/obj/machinery/light/small,
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/freezer,
-/area/medical/genetics)
 "aap" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer2{
 	dir = 8
@@ -7886,15 +7867,6 @@
 	},
 /turf/open/floor/plating,
 /area/ai_monitored/turret_protected/AIsatextAP)
-"clk" = (
-/obj/machinery/light_switch{
-	pixel_x = -25;
-	pixel_y = 28
-	},
-/mob/living/carbon/monkey/punpun,
-/obj/effect/turf_decal/tile/bar/opposingcorners,
-/turf/open/floor/iron/dark,
-/area/crew_quarters/bar)
 "clI" = (
 /obj/structure/flora/ausbushes/fullgrass,
 /obj/structure/flora/ausbushes/brflowers,
@@ -9558,6 +9530,14 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/plating,
 /area/maintenance/starboard/secondary)
+"cSp" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/freezer,
+/area/medical/genetics)
 "cSs" = (
 /turf/closed/wall,
 /area/maintenance/starboard/central)
@@ -14981,14 +14961,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron/dark,
 /area/chapel/main/monastery)
-"eGm" = (
-/obj/structure/window/reinforced{
-	dir = 1;
-	pixel_y = 1
-	},
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/freezer,
-/area/medical/genetics)
 "eGC" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer2,
 /obj/structure/cable/yellow{
@@ -30588,10 +30560,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/hallway/primary/central)
-"jLw" = (
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/freezer,
-/area/medical/virology)
 "jLA" = (
 /obj/structure/sign/warning/docking{
 	pixel_x = 32
@@ -42708,6 +42676,11 @@
 	},
 /turf/open/floor/iron,
 /area/hydroponics)
+"nDP" = (
+/obj/structure/bed/roller,
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/freezer,
+/area/medical/genetics)
 "nEf" = (
 /obj/effect/turf_decal/bot,
 /turf/open/floor/iron,
@@ -43648,6 +43621,15 @@
 /obj/machinery/air_sensor/atmos/nitrogen_tank,
 /turf/open/floor/engine/n2,
 /area/engine/atmos)
+"nRX" = (
+/obj/structure/disposalpipe/segment{
+	dir = 4
+	},
+/obj/item/toy/plush/lizard_plushie{
+	name = "Eats-The-Rubbish"
+	},
+/turf/open/floor/plating,
+/area/maintenance/disposal)
 "nSi" = (
 /obj/machinery/washing_machine,
 /obj/effect/turf_decal/delivery,
@@ -51477,6 +51459,15 @@
 /obj/effect/turf_decal/tile/blue/fourcorners/contrasted,
 /turf/open/floor/iron,
 /area/bridge)
+"qzE" = (
+/obj/structure/window/reinforced{
+	dir = 1;
+	pixel_y = 1
+	},
+/obj/structure/bed/roller,
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/freezer,
+/area/medical/genetics)
 "qzS" = (
 /obj/effect/turf_decal/tile/red/opposingcorners,
 /obj/machinery/disposal/bin,
@@ -52824,6 +52815,10 @@
 	},
 /turf/open/floor/iron,
 /area/engine/atmos)
+"qXE" = (
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/freezer,
+/area/medical/virology)
 "qXK" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -58491,6 +58486,11 @@
 /obj/machinery/hydroponics/constructable,
 /turf/open/floor/iron,
 /area/hydroponics)
+"sMf" = (
+/obj/machinery/light/small,
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/freezer,
+/area/medical/genetics)
 "sMh" = (
 /obj/structure/closet/crate,
 /obj/item/stack/ore/iron,
@@ -59909,15 +59909,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/chapel/main/monastery)
-"tmv" = (
-/obj/structure/disposalpipe/segment{
-	dir = 4
-	},
-/obj/item/toy/plush/lizard_plushie{
-	name = "Eats-The-Rubbish"
-	},
-/turf/open/floor/plating,
-/area/maintenance/disposal)
 "tmC" = (
 /obj/machinery/atmospherics/components/unary/passive_vent,
 /turf/open/floor/plating,
@@ -69166,6 +69157,15 @@
 	},
 /turf/open/floor/iron,
 /area/hallway/primary/central)
+"wjK" = (
+/obj/machinery/light_switch{
+	pixel_x = -25;
+	pixel_y = 28
+	},
+/mob/living/carbon/human/species/monkey/punpun,
+/obj/effect/turf_decal/tile/bar/opposingcorners,
+/turf/open/floor/iron/dark,
+/area/crew_quarters/bar)
 "wjX" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer2{
 	dir = 4
@@ -110257,7 +110257,7 @@ gNF
 wXw
 aYT
 nTo
-clk
+wjK
 mEv
 fhO
 cjX
@@ -118979,8 +118979,8 @@ gpT
 gqY
 uYV
 syo
-aak
-aan
+qzE
+nDP
 vBf
 qSI
 eCC
@@ -119237,7 +119237,7 @@ rQd
 rQd
 uOa
 xef
-aao
+sMf
 vBf
 kBi
 bjq
@@ -119493,7 +119493,7 @@ rDF
 vdX
 gUv
 qeJ
-eGm
+cSp
 dsx
 vBf
 jaq
@@ -127197,7 +127197,7 @@ nqK
 eJe
 iAW
 uRZ
-tmv
+nRX
 rbw
 ntM
 hor
@@ -130559,11 +130559,11 @@ aMT
 aMT
 lvw
 lYS
-jLw
-jLw
-jLw
-jLw
-jLw
+qXE
+qXE
+qXE
+qXE
+qXE
 lYS
 lvw
 aMT

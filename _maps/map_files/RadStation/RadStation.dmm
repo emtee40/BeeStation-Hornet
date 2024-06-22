@@ -7594,6 +7594,14 @@
 /obj/structure/window/reinforced,
 /turf/open/floor/iron/dark,
 /area/hallway/primary/central)
+"cwx" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	layer = 3
+	},
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/vault,
+/area/medical/genetics)
 "cwJ" = (
 /obj/machinery/door/airlock/grunge{
 	name = "Chapel Morgue";
@@ -8566,15 +8574,6 @@
 	},
 /turf/open/floor/iron/dark,
 /area/engine/atmos)
-"cLH" = (
-/obj/machinery/door/window/westleft{
-	dir = 4;
-	name = "Monkey Pen";
-	req_access_txt = "9"
-	},
-/mob/living/carbon/monkey,
-/turf/open/floor/vault,
-/area/medical/genetics)
 "cLT" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -9824,6 +9823,10 @@
 	},
 /turf/open/floor/iron/white,
 /area/science/xenobiology)
+"dgG" = (
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/grid/steel,
+/area/medical/virology)
 "dgT" = (
 /obj/effect/turf_decal/tile/neutral/half/contrasted{
 	dir = 1
@@ -17642,6 +17645,11 @@
 	},
 /turf/open/floor/iron,
 /area/science/storage)
+"fvk" = (
+/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/grid/steel,
+/area/medical/virology)
 "fvp" = (
 /obj/structure/extinguisher_cabinet{
 	pixel_x = -32
@@ -22614,14 +22622,6 @@
 	},
 /turf/open/floor/plating,
 /area/crew_quarters/heads/hop)
-"gTf" = (
-/obj/structure/chair/fancy/plastic,
-/obj/structure/lattice/catwalk,
-/obj/item/toy/plush/lizard_plushie/space{
-	name = "Taksh-Vrac"
-	},
-/turf/open/space/basic,
-/area/space/nearstation)
 "gTh" = (
 /obj/machinery/power/terminal{
 	dir = 4
@@ -32548,36 +32548,6 @@
 /obj/structure/cable/yellow,
 /turf/open/floor/iron,
 /area/science/robotics)
-"kgg" = (
-/obj/structure/table/reinforced,
-/obj/item/paper/guides/recycler,
-/obj/machinery/button/massdriver{
-	id = "TrashDisp";
-	pixel_x = -29;
-	pixel_y = 8
-	},
-/obj/machinery/button/door{
-	id = "TrashDoor";
-	name = "Disposal Vent Control";
-	pixel_x = -39;
-	pixel_y = 7;
-	req_access_txt = "12"
-	},
-/obj/structure/lattice/catwalk/over,
-/obj/item/radio/intercom{
-	dir = 1;
-	pixel_x = -34;
-	pixel_y = -7
-	},
-/obj/machinery/light_switch{
-	pixel_x = -21;
-	pixel_y = 8
-	},
-/obj/item/toy/plush/lizard_plushie{
-	name = "Eats-The-Rubbish"
-	},
-/turf/open/floor/plating,
-/area/maintenance/disposal)
 "kgx" = (
 /obj/structure/window/reinforced{
 	dir = 4
@@ -33418,10 +33388,6 @@
 /obj/effect/turf_decal/stripes/line,
 /turf/open/floor/engine,
 /area/engine/engine_room)
-"ktc" = (
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/grid/steel,
-/area/medical/virology)
 "ktu" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/wood,
@@ -40231,6 +40197,18 @@
 	},
 /turf/open/floor/iron,
 /area/hallway/primary/central)
+"mBR" = (
+/obj/structure/window/reinforced{
+	dir = 4;
+	layer = 3
+	},
+/obj/effect/decal/cleanable/blood/old,
+/obj/machinery/light{
+	dir = 1
+	},
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/vault,
+/area/medical/genetics)
 "mBT" = (
 /turf/open/floor/iron/freezer,
 /area/crew_quarters/kitchen/coldroom)
@@ -41542,6 +41520,14 @@
 /obj/effect/turf_decal/stripes/closeup,
 /turf/open/floor/iron,
 /area/security/brig)
+"mWF" = (
+/obj/structure/chair/fancy/plastic,
+/obj/structure/lattice/catwalk,
+/obj/item/toy/plush/lizard_plushie/space{
+	name = "Drkh-Hlyt"
+	},
+/turf/open/space/basic,
+/area/space/nearstation)
 "mWK" = (
 /obj/effect/turf_decal/siding/wideplating/dark,
 /obj/structure/cable/yellow{
@@ -43598,6 +43584,15 @@
 	},
 /turf/open/floor/iron,
 /area/hallway/primary/aft)
+"nAk" = (
+/obj/machinery/door/window/westleft{
+	dir = 4;
+	name = "Monkey Pen";
+	req_access_txt = "9"
+	},
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/vault,
+/area/medical/genetics)
 "nAr" = (
 /obj/machinery/vending/boozeomat,
 /turf/closed/wall,
@@ -44841,6 +44836,36 @@
 	},
 /turf/open/floor/carpet/red,
 /area/crew_quarters/heads/hos)
+"nSb" = (
+/obj/structure/table/reinforced,
+/obj/item/paper/guides/recycler,
+/obj/machinery/button/massdriver{
+	id = "TrashDisp";
+	pixel_x = -29;
+	pixel_y = 8
+	},
+/obj/machinery/button/door{
+	id = "TrashDoor";
+	name = "Disposal Vent Control";
+	pixel_x = -39;
+	pixel_y = 7;
+	req_access_txt = "12"
+	},
+/obj/structure/lattice/catwalk/over,
+/obj/item/radio/intercom{
+	dir = 1;
+	pixel_x = -34;
+	pixel_y = -7
+	},
+/obj/machinery/light_switch{
+	pixel_x = -21;
+	pixel_y = 8
+	},
+/obj/item/toy/plush/lizard_plushie{
+	name = "Eats-The-Rubbish"
+	},
+/turf/open/floor/plating,
+/area/maintenance/disposal)
 "nSe" = (
 /obj/effect/turf_decal/tile/neutral/half/contrasted{
 	dir = 1
@@ -45200,18 +45225,6 @@
 /obj/machinery/pipedispenser,
 /turf/open/floor/iron/dark,
 /area/engine/atmos)
-"nZj" = (
-/obj/structure/window/reinforced{
-	dir = 4;
-	layer = 3
-	},
-/obj/effect/decal/cleanable/blood/old,
-/obj/machinery/light{
-	dir = 1
-	},
-/mob/living/carbon/monkey,
-/turf/open/floor/vault,
-/area/medical/genetics)
 "nZk" = (
 /obj/effect/turf_decal/tile/neutral/anticorner{
 	dir = 9
@@ -50308,11 +50321,6 @@
 /obj/effect/turf_decal/bot,
 /turf/open/floor/iron/white,
 /area/crew_quarters/kitchen)
-"pFF" = (
-/obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/grid/steel,
-/area/medical/virology)
 "pGd" = (
 /obj/structure/closet/emcloset,
 /obj/effect/turf_decal/box,
@@ -54036,6 +54044,14 @@
 	},
 /turf/open/floor/iron,
 /area/engine/atmos)
+"qOu" = (
+/obj/structure/chair/fancy/plastic,
+/obj/structure/lattice/catwalk,
+/obj/item/toy/plush/lizard_plushie/space{
+	name = "Taksh-Vrac"
+	},
+/turf/open/space/basic,
+/area/space/nearstation)
 "qOG" = (
 /obj/effect/landmark/event_spawn,
 /obj/structure/cable/yellow{
@@ -59418,14 +59434,6 @@
 	},
 /turf/open/floor/circuit,
 /area/ai_monitored/storage/satellite)
-"sDE" = (
-/obj/structure/chair/fancy/plastic,
-/obj/structure/lattice/catwalk,
-/obj/item/toy/plush/lizard_plushie/space{
-	name = "Drkh-Hlyt"
-	},
-/turf/open/space/basic,
-/area/space/nearstation)
 "sDJ" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layer4{
 	dir = 4
@@ -60169,6 +60177,11 @@
 	},
 /turf/open/floor/iron,
 /area/hallway/primary/aft)
+"sOE" = (
+/obj/machinery/atmospherics/components/unary/vent_pump/on/layer2,
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/grid/steel,
+/area/medical/virology)
 "sOJ" = (
 /obj/machinery/atmospherics/pipe/simple/yellow/visible,
 /obj/machinery/atmospherics/pipe/simple/yellow/visible{
@@ -66817,6 +66830,13 @@
 /obj/effect/decal/cleanable/dirt/dust,
 /turf/open/floor/plating,
 /area/maintenance/department/medical)
+"uOi" = (
+/obj/structure/lattice,
+/obj/item/toy/plush/lizard_plushie/space{
+	name = "Embraces-the-Void"
+	},
+/turf/open/space/basic,
+/area/space/nearstation)
 "uOp" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -67377,14 +67397,6 @@
 	},
 /turf/open/floor/iron,
 /area/engine/engine_room)
-"uXK" = (
-/obj/structure/window/reinforced{
-	dir = 4;
-	layer = 3
-	},
-/mob/living/carbon/monkey,
-/turf/open/floor/vault,
-/area/medical/genetics)
 "uXN" = (
 /obj/effect/turf_decal/tile/blue/fourcorners/contrasted{
 	alpha = 200;
@@ -67967,11 +67979,6 @@
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer4,
 /turf/open/floor/iron/dark,
 /area/science/robotics)
-"vhE" = (
-/obj/machinery/atmospherics/components/unary/vent_pump/on/layer2,
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/grid/steel,
-/area/medical/virology)
 "vhM" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Plumbing Factory Maintenance";
@@ -70758,13 +70765,6 @@
 	},
 /turf/open/floor/iron,
 /area/hallway/primary/fore)
-"wbs" = (
-/obj/structure/lattice,
-/obj/item/toy/plush/lizard_plushie/space{
-	name = "Embraces-the-Void"
-	},
-/turf/open/space/basic,
-/area/space/nearstation)
 "wbE" = (
 /obj/effect/turf_decal/bot,
 /obj/machinery/disposal/bin,
@@ -98438,7 +98438,7 @@ nEb
 vIF
 pOq
 vxS
-kgg
+nSb
 sNa
 vDo
 jut
@@ -109601,7 +109601,7 @@ yeA
 yeA
 yeA
 yeA
-wbs
+uOi
 yeA
 yeA
 yeA
@@ -114160,9 +114160,9 @@ rtj
 req
 gxo
 bWm
-nZj
-cLH
-uXK
+mBR
+nAk
+cwx
 bWm
 dLE
 wyb
@@ -121135,7 +121135,7 @@ gjW
 muk
 gsA
 ewB
-sDE
+mWF
 gsA
 yeA
 yeA
@@ -121353,7 +121353,7 @@ aJb
 odc
 nan
 tfq
-ktc
+dgG
 hzd
 jlZ
 vbr
@@ -121610,8 +121610,8 @@ kLq
 vwY
 fbJ
 tfq
-ktc
-pFF
+dgG
+fvk
 qNV
 mbJ
 eTq
@@ -121649,7 +121649,7 @@ yeA
 yeA
 gsA
 ewB
-gTf
+qOu
 gsA
 yeA
 yeA
@@ -121868,7 +121868,7 @@ soP
 rKv
 tfq
 qXN
-vhE
+sOE
 abL
 dxq
 oYZ

@@ -2412,34 +2412,6 @@
 	},
 /turf/open/floor/plating,
 /area/maintenance/disposal)
-"aqF" = (
-/obj/machinery/button/door{
-	id = "Disposal Exit";
-	name = "Disposal Vent Control";
-	pixel_x = -25;
-	pixel_y = 4;
-	req_access_txt = "12"
-	},
-/obj/machinery/button/massdriver{
-	id = "trash";
-	name = "Trash Ejector Control";
-	pixel_x = -26;
-	pixel_y = -6
-	},
-/obj/structure/chair/stool,
-/obj/machinery/light/small{
-	dir = 8
-	},
-/obj/structure/disposalpipe/segment{
-	dir = 6
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/turf_decal/delivery,
-/obj/item/toy/plush/lizard_plushie{
-	name = "Eats-The-Rubbish"
-	},
-/turf/open/floor/iron,
-/area/maintenance/disposal)
 "aqG" = (
 /obj/machinery/conveyor_switch/oneway{
 	dir = 8;
@@ -35158,6 +35130,21 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron,
 /area/maintenance/aft)
+"ewK" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	layer = 2.9
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/stripes/end,
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron,
+/area/medical/genetics)
 "ewN" = (
 /obj/effect/turf_decal/bot_white/left,
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
@@ -47721,10 +47708,6 @@
 /obj/structure/sign/departments/minsky/supply/janitorial,
 /turf/closed/wall,
 /area/janitor/custodian)
-"iGk" = (
-/mob/living/carbon/monkey,
-/turf/open/floor/iron/grid/steel,
-/area/medical/virology)
 "iGD" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/machinery/light{
@@ -56669,6 +56652,12 @@
 	},
 /turf/open/floor/iron,
 /area/medical/medbay/aft)
+"lKO" = (
+/obj/machinery/deepfryer,
+/mob/living/carbon/human/species/monkey/punpun,
+/obj/effect/turf_decal/tile/red/fourcorners/contrasted,
+/turf/open/floor/iron,
+/area/crew_quarters/kitchen)
 "lKS" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/tile/neutral/anticorner/contrasted{
@@ -63543,12 +63532,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron/dark,
 /area/crew_quarters/locker)
-"nUK" = (
-/obj/machinery/deepfryer,
-/mob/living/carbon/monkey/punpun,
-/obj/effect/turf_decal/tile/red/fourcorners/contrasted,
-/turf/open/floor/iron,
-/area/crew_quarters/kitchen)
 "nUN" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -80081,6 +80064,34 @@
 /obj/structure/chair/fancy/comfy,
 /turf/open/floor/carpet/grimy,
 /area/hallway/secondary/entry)
+"tBT" = (
+/obj/machinery/button/door{
+	id = "Disposal Exit";
+	name = "Disposal Vent Control";
+	pixel_x = -25;
+	pixel_y = 4;
+	req_access_txt = "12"
+	},
+/obj/machinery/button/massdriver{
+	id = "trash";
+	name = "Trash Ejector Control";
+	pixel_x = -26;
+	pixel_y = -6
+	},
+/obj/structure/chair/stool,
+/obj/machinery/light/small{
+	dir = 8
+	},
+/obj/structure/disposalpipe/segment{
+	dir = 6
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/delivery,
+/obj/item/toy/plush/lizard_plushie{
+	name = "Eats-The-Rubbish"
+	},
+/turf/open/floor/iron,
+/area/maintenance/disposal)
 "tBV" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/iron/dark,
@@ -80759,6 +80770,10 @@
 	},
 /turf/open/floor/iron,
 /area/crew_quarters/bar/atrium)
+"tPr" = (
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron/grid/steel,
+/area/medical/virology)
 "tPz" = (
 /obj/structure/table,
 /obj/structure/cable/yellow{
@@ -82117,6 +82132,22 @@
 	},
 /turf/open/floor/iron,
 /area/engine/atmospherics_engine)
+"upA" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/machinery/door/window/westright{
+	dir = 4;
+	name = "'Monkey Pen";
+	req_access_txt = "9"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/stripes/line{
+	dir = 4
+	},
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron,
+/area/medical/genetics)
 "upD" = (
 /obj/effect/turf_decal/tile/neutral/half/contrasted{
 	dir = 8
@@ -82981,6 +83012,23 @@
 	},
 /turf/open/floor/iron,
 /area/maintenance/port/fore)
+"uEt" = (
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/turf_decal/stripes/end{
+	dir = 1
+	},
+/mob/living/carbon/human/species/monkey,
+/turf/open/floor/iron,
+/area/medical/genetics)
 "uEv" = (
 /obj/structure/cable/yellow{
 	icon_state = "4-8"
@@ -84747,21 +84795,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron/dark,
 /area/science/nanite)
-"vgB" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	layer = 2.9
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/turf_decal/stripes/end,
-/mob/living/carbon/monkey,
-/turf/open/floor/iron,
-/area/medical/genetics)
 "vgQ" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layer2{
 	dir = 4
@@ -88423,22 +88456,6 @@
 	},
 /turf/open/floor/iron,
 /area/security/brig)
-"wqx" = (
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/machinery/door/window/westright{
-	dir = 4;
-	name = "'Monkey Pen";
-	req_access_txt = "9"
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/turf_decal/stripes/line{
-	dir = 4
-	},
-/mob/living/carbon/monkey,
-/turf/open/floor/iron,
-/area/medical/genetics)
 "wqz" = (
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron,
@@ -90653,23 +90670,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron,
 /area/crew_quarters/locker)
-"wZR" = (
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/turf_decal/stripes/end{
-	dir = 1
-	},
-/mob/living/carbon/monkey,
-/turf/open/floor/iron,
-/area/medical/genetics)
 "xbJ" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -131759,7 +131759,7 @@ rOT
 etm
 ttZ
 bdJ
-nUK
+lKO
 bgs
 bhQ
 bjF
@@ -134400,10 +134400,10 @@ cRd
 dbu
 pIp
 dvc
-wZR
+uEt
 hIW
-wqx
-vgB
+upA
+ewK
 dvc
 ybx
 isk
@@ -139036,7 +139036,7 @@ jMM
 mKL
 mKL
 dPq
-iGk
+tPr
 bkC
 wLH
 sPz
@@ -139293,8 +139293,8 @@ vau
 lII
 aqa
 dPq
-iGk
-iGk
+tPr
+tPr
 oQr
 rjR
 hFD
@@ -139551,7 +139551,7 @@ icT
 mKL
 dPq
 uyH
-iGk
+tPr
 pQj
 kqr
 jky
@@ -140981,7 +140981,7 @@ aad
 aad
 aoF
 apE
-aqF
+tBT
 arf
 asf
 atD
