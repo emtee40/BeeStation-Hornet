@@ -22,8 +22,11 @@
 		bound_overlay.destruction_timer = QDEL_IN(bound_overlay, 10 SECONDS)
 
 // Grabs a list of every openspace mimic that's directly or indirectly copying this object. Returns an empty list if none found.
-/atom/movable/proc/get_associated_mimics()
-	. = list()
+/atom/movable/proc/get_associated_mimics(including_self = FALSE)
+	if(including_self)
+		. = list(src)
+	else
+		. = list()
 	var/atom/movable/curr = src
 	while (curr.bound_overlay)
 		. += curr.bound_overlay

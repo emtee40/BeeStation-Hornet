@@ -60,3 +60,19 @@ GLOBAL_LIST_INIT(z_defines, list(
 On ZMM_AUTOMANGLE:
 	It's separate from ZMM_MANGLE_PLANES so SSoverlays doesn't disable mangling on a manually flagged atom.
 */
+
+/// quick while loop thing when you don't have to access things a lot
+/// Use FOR_LISTED_ZMIMIC if you need to access a type
+/// Pass "atom.bound_overlay" to this param if you want to skip original atom
+#define WHILE_ZMIMIC_MOVABLE(Current, Starting) \
+	##Current = null; \
+	while(##Starting && (##Current = ##Current ? (##Current?:bound_overlay) : ##Starting) && ##Current)
+
+#define WHILE_ZMIMIC_TURF(Current, Starting) \
+	##Current = null; \
+	while(##Starting && (##Current = ##Current ? (##Current?:above) : ##Starting) && (##Current == ##Starting ? (isopenturf(##Starting) || istransparentturf(##Starting)) : istransparentturf(##Current)))
+
+/// a sinful macro, hybrid of the two macro above. This can be used when a thing can be atom/movable/turf dynamically.
+#define WHILE_ZMIMIC_ATOM(Current, Starting) \
+	##Current = null; \
+	while(##Starting && (##Current = ismovable(##Current) ? (##Current?:bound_overlay) : isturf(##Current) ? (##Current?:above) : ##Starting) && (ismovable(##Current) || (isturf(##Current) && (##Current == ##Starting ? (isopenturf(##Starting) || istransparentturf(##Starting)) : istransparentturf(##Current)))))

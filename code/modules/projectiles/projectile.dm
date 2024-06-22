@@ -671,9 +671,9 @@
 	if(!nondirectional_sprite)
 		var/matrix/M = new
 		M.Turn(Angle)
-		transform = M
+		transform = M // MARKING: this part doesn't need z-mimic support
 	trajectory_ignore_forcemove = TRUE
-	forceMove(starting)
+	forceMove(starting) // MARKING: this part doesn't need z-mimic support
 	trajectory_ignore_forcemove = FALSE
 	trajectory = new(starting.x, starting.y, starting.z, pixel_x, pixel_y, Angle, SSprojectiles.global_pixel_speed)
 	last_projectile_move = world.time
@@ -687,9 +687,13 @@
 /obj/projectile/proc/setAngle(new_angle)	//wrapper for overrides.
 	Angle = new_angle
 	if(!nondirectional_sprite)
-		var/matrix/M = new
-		M.Turn(Angle)
-		transform = M
+		var/matrix/matrix_to_apply = new
+		matrix_to_apply.Turn(Angle)
+		// MARKING: z-mimic handled animate
+		var/atom/movable/each_mimic
+		WHILE_ZMIMIC_MOVABLE(each_mimic, src)
+			each_mimic.transform = matrix_to_apply
+		// MARKING: z-mimic done
 	if(trajectory)
 		trajectory.set_angle(new_angle)
 	return TRUE
@@ -757,9 +761,12 @@
 		return
 	last_projectile_move = world.time
 	if(!nondirectional_sprite && !hitscanning)
-		var/matrix/M = new
-		M.Turn(Angle)
-		transform = M
+		var/matrix/matrix_to_apply = new
+		matrix_to_apply.Turn(Angle)
+		// MARKING: z-mimic handle
+		var/atom/movable/each_mimic
+		WHILE_ZMIMIC_MOVABLE(each_mimic, src)
+			each_mimic.transform = matrix_to_apply
 	if(homing)
 		process_homing()
 	var/forcemoved = FALSE
@@ -774,13 +781,23 @@
 		if(T.z != loc.z)
 			var/old = loc
 			before_z_change(loc, T)
+			// MARKING: z-mimic handle
 			trajectory_ignore_forcemove = TRUE
-			forceMove(T)
+			var/atom/movable/each_mimic
+			WHILE_ZMIMIC_MOVABLE(each_mimic, src)
+				var/turf/mimic_turf = locate(T.x, T.y, each_mimic.z)
+				each_mimic.forceMove(mimic_turf)
 			trajectory_ignore_forcemove = FALSE
+			// MARKING: z-mimic done
 			after_z_change(old, loc)
 			if(!hitscanning)
-				pixel_x = trajectory.return_px()
-				pixel_y = trajectory.return_py()
+				// MARKING: z-mimic handle
+				var/new_pixel_x = trajectory.return_px()
+				var/new_pixel_y = trajectory.return_py()
+				WHILE_ZMIMIC_MOVABLE(each_mimic, src)
+					each_mimic.pixel_x = new_pixel_x
+					each_mimic.pixel_y = new_pixel_y
+				// MARKING: z-mimic done
 			forcemoved = TRUE
 			hitscan_last = loc
 		else if(T != loc)
@@ -789,9 +806,17 @@
 	if(QDELETED(src))
 		return
 	if(!hitscanning && !forcemoved)
-		pixel_x = trajectory.return_px() - trajectory.mpx * trajectory_multiplier * SSprojectiles.global_iterations_per_move
-		pixel_y = trajectory.return_py() - trajectory.mpy * trajectory_multiplier * SSprojectiles.global_iterations_per_move
-		animate(src, pixel_x = trajectory.return_px(), pixel_y = trajectory.return_py(), time = 1, flags = ANIMATION_END_NOW)
+		// MARKING: z-mimic handle
+		var/traj_px = trajectory.return_px()
+		var/traj_py = trajectory.return_py()
+		var/new_pixel_x = traj_px - trajectory.mpx * trajectory_multiplier * SSprojectiles.global_iterations_per_move
+		var/new_pixel_y = traj_py - trajectory.mpy * trajectory_multiplier * SSprojectiles.global_iterations_per_move
+		var/atom/movable/each_mimic
+		WHILE_ZMIMIC_MOVABLE(each_mimic, src)
+			each_mimic.pixel_x = new_pixel_x
+			each_mimic.pixel_y = new_pixel_y
+			animate(each_mimic, pixel_x = traj_px, pixel_y = traj_py, time = 1, flags = ANIMATION_END_NOW)
+		// MARKING: z-mimic done
 	Range()
 
 /obj/projectile/proc/process_homing()			//may need speeding up in the future performance wise.
@@ -820,7 +845,7 @@
 	var/turf/curloc = get_turf(source)
 	var/turf/targloc = get_turf(target)
 	trajectory_ignore_forcemove = TRUE
-	forceMove(get_turf(source))
+	forceMove(get_turf(source)) // MARKING: this part doesn't need z-mimic support. Let it be.
 	trajectory_ignore_forcemove = FALSE
 	starting = get_turf(source)
 	original = target
