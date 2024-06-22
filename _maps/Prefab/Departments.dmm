@@ -138,6 +138,12 @@
 /obj/machinery/fax/med,
 /turf/open/floor/iron/white,
 /area/crew_quarters/heads/cmo)
+"cR" = (
+/obj/machinery/suit_storage_unit/standard_unit,
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/turf/open/floor/iron/dark,
+/area/space)
 "dc" = (
 /obj/structure/disposalpipe/sorting/mail{
 	dir = 2;
@@ -167,6 +173,16 @@
 /area/space)
 "dO" = (
 /obj/structure/sign/painting/library,
+/turf/open/floor/iron/dark,
+/area/space)
+"dR" = (
+/obj/machinery/button/door{
+	id = "evashutter";
+	name = "E.V.A. Storage Shutter Toggle";
+	req_access_txt = "19"
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
 /turf/open/floor/iron/dark,
 /area/space)
 "dZ" = (
@@ -339,10 +355,6 @@
 /obj/structure/girder,
 /turf/open/floor/plating,
 /area/space)
-"iP" = (
-/obj/machinery/status_display/door_timer,
-/turf/open/floor/iron,
-/area/space)
 "jm" = (
 /obj/machinery/status_display/supply,
 /turf/open/floor/iron,
@@ -452,6 +464,15 @@
 /area/security/main{
 	name = "Security Locker Room"
 	})
+"mk" = (
+/obj/machinery/door/airlock/command/glass{
+	name = "E.V.A. Storage";
+	req_access_txt = "18"
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/turf/open/floor/iron/dark,
+/area/space)
 "mo" = (
 /obj/item/toy/plush/moth/lovers,
 /turf/open/floor/iron/dark,
@@ -792,6 +813,11 @@
 	},
 /turf/open/floor/circuit,
 /area/ai_monitored/turret_protected/ai)
+"uA" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners/contrasted,
+/obj/item/storage/toolbox/medical,
+/turf/open/floor/iron/white,
+/area/medical/apothecary)
 "uM" = (
 /obj/machinery/vending/wardrobe/hydro_wardrobe,
 /turf/open/floor/grass/no_border,
@@ -810,6 +836,11 @@
 /obj/effect/landmark/start/captain,
 /turf/open/floor/carpet/blue,
 /area/crew_quarters/heads/captain)
+"vo" = (
+/obj/effect/turf_decal/tile/yellow/fourcorners/contrasted,
+/obj/structure/closet/secure_closet/chemical/plumbing,
+/turf/open/floor/iron/white,
+/area/medical/apothecary)
 "vp" = (
 /obj/structure/disposalpipe/sorting/mail{
 	dir = 2;
@@ -856,6 +887,12 @@
 "xB" = (
 /obj/machinery/button/door,
 /turf/open/floor/iron,
+/area/space)
+"xG" = (
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/open/floor/iron/dark,
 /area/space)
 "xI" = (
 /obj/effect/turf_decal/tile/dark_red/fourcorners/contrasted{
@@ -956,6 +993,29 @@
 /obj/machinery/vending/wardrobe/jani_wardrobe,
 /turf/open/floor/iron,
 /area/janitor)
+"An" = (
+/obj/item/stack/sheet/plasteel/fifty{
+	amount = 10;
+	pixel_x = -2;
+	pixel_y = -2
+	},
+/obj/item/stack/sheet/iron/fifty,
+/obj/item/stack/sheet/glass/fifty{
+	pixel_x = 2;
+	pixel_y = 2
+	},
+/obj/item/stack/sheet/rglass{
+	amount = 50;
+	pixel_x = 4;
+	pixel_y = 4
+	},
+/obj/item/stack/rods/fifty{
+	pixel_y = 5
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/turf/open/floor/iron/dark,
+/area/space)
 "Ax" = (
 /obj/machinery/power/apc/auto_name/east,
 /obj/effect/spawner/structure/window/reinforced,
@@ -1013,6 +1073,15 @@
 /obj/effect/decal/cleanable/blood/old,
 /turf/open/floor/plating,
 /area/maintenance/central)
+"Cu" = (
+/obj/machinery/door/poddoor/shutters{
+	id = "evashutter";
+	name = "E.V.A. Storage Shutter"
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/turf/open/floor/iron/dark,
+/area/space)
 "CE" = (
 /obj/machinery/rnd/production/techfab/department/service,
 /turf/open/floor/wood,
@@ -1168,6 +1237,20 @@
 /obj/structure/grille/broken,
 /turf/open/floor/plating,
 /area/space)
+"GS" = (
+/obj/item/storage/toolbox/rcd,
+/obj/machinery/door/window/northleft{
+	dir = 8;
+	name = "RCD Storage";
+	req_access_txt = "19"
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/obj/structure/closet/crate/rcd{
+	pixel_y = 4
+	},
+/turf/open/floor/iron/dark,
+/area/space)
 "Hb" = (
 /obj/effect/turf_decal/tile/purple/fourcorners/contrasted,
 /obj/machinery/vending/wardrobe/science_wardrobe,
@@ -1198,6 +1281,18 @@
 /area/security/main{
 	name = "Security Locker Room"
 	})
+"HN" = (
+/obj/item/tank/jetpack/carbondioxide,
+/obj/item/clothing/shoes/magboots,
+/obj/item/storage/belt/utility,
+/obj/item/radio,
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/obj/item/grenade/chem_grenade/metalfoam{
+	pixel_x = -7
+	},
+/turf/open/floor/iron/dark,
+/area/space)
 "HZ" = (
 /obj/structure/disposalpipe/sorting/mail{
 	dir = 2;
@@ -1222,6 +1317,15 @@
 /obj/machinery/vendor/exploration,
 /turf/open/floor/iron/dark,
 /area/quartermaster/exploration_prep)
+"Iw" = (
+/obj/structure/tank_dispenser/oxygen{
+	pixel_x = -1;
+	pixel_y = 2
+	},
+/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
+/obj/effect/turf_decal/tile/dark_blue/fourcorners/contrasted,
+/turf/open/floor/iron/dark,
+/area/space)
 "IO" = (
 /obj/structure/closet/secure_closet/RD,
 /turf/open/floor/carpet/purple,
@@ -1382,6 +1486,10 @@
 	},
 /turf/open/floor/plating,
 /area/maintenance/disposal)
+"MK" = (
+/obj/machinery/status_display/door_timer,
+/turf/open/floor/iron,
+/area/space)
 "MP" = (
 /obj/item/book/manual/wiki/sopsupply,
 /turf/open/floor/carpet/orange,
@@ -1395,10 +1503,6 @@
 /obj/effect/landmark/start/botanist,
 /turf/open/floor/grass/no_border,
 /area/hydroponics)
-"NA" = (
-/obj/item/toy/plush/moth,
-/turf/open/floor/iron,
-/area/space)
 "NH" = (
 /obj/effect/turf_decal/tile/blue/fourcorners/contrasted{
 	alpha = 200;
@@ -1967,7 +2071,7 @@ oG
 aJ
 aJ
 qf
-Wx
+vo
 ca
 rc
 np
@@ -1988,7 +2092,7 @@ EI
 JM
 Zq
 yJ
-Wx
+uA
 np
 fz
 lE
@@ -2206,9 +2310,9 @@ Sa
 ZB
 JV
 ti
-Qk
-Qk
-Qk
+Cu
+cR
+Iw
 XF
 XF
 XF
@@ -2226,9 +2330,9 @@ Tq
 ti
 Vg
 ti
-Qk
-NA
-Qk
+dR
+xG
+GS
 XF
 NO
 XF
@@ -2246,9 +2350,9 @@ uM
 RB
 ti
 Iu
-Qk
-Qk
-Qk
+mk
+HN
+An
 XF
 XF
 XF
@@ -2453,7 +2557,7 @@ XF
 XF
 XF
 TX
-iP
+MK
 ps
 Co
 Zj
