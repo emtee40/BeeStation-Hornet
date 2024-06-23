@@ -400,15 +400,6 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/plating,
 /area/awaymission/snowdin/post/research)
-"bq" = (
-/obj/structure/statue/snow/snowman{
-	name = "Snow-Luc Price"
-	},
-/obj/item/clothing/head/hats/hos{
-	pixel_y = 10
-	},
-/turf/open/floor/plating/asteroid/snow,
-/area/awaymission/snowdin/outside)
 "bs" = (
 /turf/open/floor/plating,
 /area/awaymission/snowdin/post/research)
@@ -5558,6 +5549,16 @@
 	},
 /turf/open/floor/iron,
 /area/awaymission/snowdin/post/engineering)
+"qd" = (
+/obj/structure/reagent_dispensers/fueltank,
+/obj/item/clothing/head/utility/welding,
+/obj/item/weldingtool/largetank,
+/obj/effect/turf_decal/bot,
+/obj/machinery/atmospherics/pipe/simple/supply/visible{
+	dir = 8
+	},
+/turf/open/floor/iron,
+/area/awaymission/snowdin/post/engineering)
 "qe" = (
 /obj/machinery/atmospherics/pipe/simple/supply/visible{
 	dir = 8
@@ -5848,15 +5849,6 @@
 	broken = 1
 	},
 /area/awaymission/snowdin/post/engineering)
-"qT" = (
-/obj/structure/statue/snow/snowman{
-	anchored = 1
-	},
-/obj/item/clothing/head/hats/bowler{
-	pixel_y = 13
-	},
-/turf/open/floor/plating/asteroid/snow,
-/area/awaymission/snowdin/outside)
 "qX" = (
 /obj/machinery/computer/atmos_control/tank{
 	dir = 1;
@@ -6537,6 +6529,15 @@
 	name = "Shuttle Transist Console"
 	},
 /turf/open/floor/iron/dark/snowdin,
+/area/awaymission/snowdin/outside)
+"sV" = (
+/obj/structure/statue/snow/snowman{
+	anchored = 1
+	},
+/obj/item/clothing/head/hats/bowler{
+	pixel_y = 13
+	},
+/turf/open/floor/plating/asteroid/snow,
 /area/awaymission/snowdin/outside)
 "sW" = (
 /obj/machinery/power/turbine{
@@ -7935,17 +7936,6 @@
 /obj/structure/fence,
 /turf/open/floor/plating/snowed/cavern,
 /area/awaymission/snowdin/cave/cavern)
-"yj" = (
-/obj/machinery/light{
-	dir = 8
-	},
-/obj/structure/closet/crate,
-/obj/item/relic,
-/obj/item/relic,
-/turf/open/floor/plating{
-	broken = 1
-	},
-/area/awaymission/snowdin/post/mining_dock)
 "yl" = (
 /obj/structure/sign/warning/nosmoking{
 	pixel_x = -32
@@ -8009,13 +7999,6 @@
 "yv" = (
 /turf/closed/wall/mineral/snow,
 /area/awaymission/snowdin/outside)
-"yx" = (
-/obj/structure/closet/crate,
-/obj/item/relic,
-/obj/item/relic,
-/obj/item/relic,
-/turf/open/floor/plating,
-/area/awaymission/snowdin/post/mining_dock)
 "yy" = (
 /obj/effect/turf_decal/stripes/corner{
 	dir = 4
@@ -10065,6 +10048,15 @@
 /obj/structure/lattice/catwalk,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/snowdin/outside)
+"FF" = (
+/obj/structure/statue/snow/snowman{
+	name = "Snow-Luc Price"
+	},
+/obj/item/clothing/head/hats/hos{
+	pixel_y = 10
+	},
+/turf/open/floor/plating/asteroid/snow,
+/area/awaymission/snowdin/outside)
 "FG" = (
 /obj/structure/cable/yellow{
 	icon_state = "1-2"
@@ -10346,6 +10338,15 @@
 /area/awaymission/snowdin/outside)
 "Gx" = (
 /turf/closed/wall,
+/area/awaymission/snowdin/post/mining_main/robotics)
+"Gy" = (
+/obj/structure/table,
+/obj/item/clothing/head/utility/welding{
+	pixel_x = -3;
+	pixel_y = 5
+	},
+/obj/item/clothing/glasses/welding,
+/turf/open/floor/iron,
 /area/awaymission/snowdin/post/mining_main/robotics)
 "Gz" = (
 /turf/open/floor/plating,
@@ -11171,16 +11172,6 @@
 	},
 /turf/open/floor/carpet/grimy,
 /area/awaymission/snowdin/post/mining_main)
-"JM" = (
-/obj/structure/reagent_dispensers/fueltank,
-/obj/item/clothing/head/utility/welding,
-/obj/item/weldingtool/largetank,
-/obj/effect/turf_decal/bot,
-/obj/machinery/atmospherics/pipe/simple/supply/visible{
-	dir = 8
-	},
-/turf/open/floor/iron,
-/area/awaymission/snowdin/post/engineering)
 "JN" = (
 /obj/structure/closet/crate{
 	opened = 1
@@ -11844,11 +11835,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron/dark,
 /area/awaymission/snowdin/cave)
-"Nc" = (
-/obj/vehicle/sealed/mecha/working/ripley/mining,
-/obj/effect/turf_decal/bot,
-/turf/open/floor/mech_bay_recharge_floor,
-/area/awaymission/snowdin/post/mining_main/mechbay)
 "Nd" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/turf_decal/tile/neutral/half/contrasted{
@@ -11864,12 +11850,11 @@
 	},
 /turf/open/floor/iron,
 /area/awaymission/snowdin/post/mining_main)
-"Ng" = (
-/obj/structure/closet/crate,
-/obj/item/relic,
-/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
-/turf/open/floor/iron,
-/area/awaymission/snowdin/post/mining_dock)
+"Nh" = (
+/obj/vehicle/sealed/mecha/working/ripley/mining,
+/obj/effect/turf_decal/bot,
+/turf/open/floor/mech_bay_recharge_floor,
+/area/awaymission/snowdin/post/mining_main/mechbay)
 "Nj" = (
 /obj/structure/door_assembly/door_assembly_min{
 	anchored = 1;
@@ -12316,14 +12301,6 @@
 	},
 /turf/open/floor/iron/white,
 /area/awaymission/snowdin/post)
-"PK" = (
-/obj/structure/closet/crate,
-/obj/item/relic,
-/obj/item/relic,
-/obj/item/relic,
-/obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
-/turf/open/floor/iron,
-/area/awaymission/snowdin/post/mining_dock)
 "PO" = (
 /obj/effect/spawner/randomvend/snack,
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
@@ -12491,6 +12468,10 @@
 /obj/effect/turf_decal/tile/neutral/half/contrasted,
 /turf/open/floor/iron/dark,
 /area/awaymission/snowdin/cave)
+"QI" = (
+/obj/structure/closet/crate,
+/turf/open/floor/plating,
+/area/awaymission/snowdin/post/mining_dock)
 "QL" = (
 /obj/machinery/door/airlock/external{
 	name = "Ready Room";
@@ -13542,15 +13523,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron/dark,
 /area/awaymission/snowdin/cave)
-"Wh" = (
-/obj/structure/table,
-/obj/item/clothing/head/utility/welding{
-	pixel_x = -3;
-	pixel_y = 5
-	},
-/obj/item/clothing/glasses/welding,
-/turf/open/floor/iron,
-/area/awaymission/snowdin/post/mining_main/robotics)
 "Wi" = (
 /obj/effect/turf_decal/tile/neutral/half/contrasted{
 	dir = 1
@@ -13999,6 +13971,15 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
 /turf/open/floor/iron/dark/snowdin,
 /area/awaymission/snowdin/cave)
+"Yq" = (
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/structure/closet/crate,
+/turf/open/floor/plating{
+	broken = 1
+	},
+/area/awaymission/snowdin/post/mining_dock)
 "Yr" = (
 /obj/effect/decal/cleanable/vomit/old,
 /obj/effect/turf_decal/tile/neutral/fourcorners/contrasted,
@@ -26414,7 +26395,7 @@ af
 af
 ak
 af
-qT
+sV
 af
 af
 af
@@ -30004,7 +29985,7 @@ nY
 ov
 oV
 nN
-JM
+qd
 qB
 Xs
 rt
@@ -43811,7 +43792,7 @@ af
 af
 am
 sf
-bq
+FF
 af
 am
 ae
@@ -58722,7 +58703,7 @@ oZ
 oZ
 oZ
 Ge
-Wh
+Gy
 GV
 Hs
 HJ
@@ -63352,7 +63333,7 @@ GJ
 He
 HA
 HO
-Nc
+Nh
 GH
 wL
 wL
@@ -64282,8 +64263,8 @@ RA
 wL
 wL
 Nk
-yj
-PK
+Yq
+UT
 xW
 eJ
 eJ
@@ -64539,8 +64520,8 @@ xy
 XD
 xy
 Nk
-Ng
-yx
+UT
+QI
 wD
 eJ
 eJ
